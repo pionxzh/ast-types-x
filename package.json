@@ -1,7 +1,8 @@
 {
-  "author": "Ben Newman <bn@cs.stanford.edu>",
-  "name": "ast-types",
+  "author": "Pionxzh",
+  "name": "ast-types-x",
   "version": "0.16.1",
+  "packageManager": "pnpm@8.15.7",
   "description": "Esprima-compatible implementation of the Mozilla JS Parser API",
   "keywords": [
     "ast",
@@ -19,10 +20,10 @@
     "transformation",
     "syntax"
   ],
-  "homepage": "http://github.com/benjamn/ast-types",
+  "homepage": "http://github.com/pionxzh/ast-types-x",
   "repository": {
     "type": "git",
-    "url": "git://github.com/benjamn/ast-types.git"
+    "url": "git://github.com/pionxzh/ast-types-x.git"
   },
   "license": "MIT",
   "main": "lib/main.js",

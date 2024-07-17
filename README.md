@@ -1,4 +1,4 @@
-# AST Types ![CI](https://github.com/benjamn/ast-types/workflows/CI/badge.svg)
+# AST Types ![CI](https://github.com/pionxzh/ast-types-x/workflows/CI/badge.svg)
 
 This module provides an efficient, modular,
 [Esprima](https://github.com/ariya/esprima)-compatible implementation of
@@ -10,16 +10,9 @@ API](https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API).
 Installation
 ---
 
-From NPM:
-
-    npm install ast-types
-
-From GitHub:
-
-    cd path/to/node_modules
-    git clone git://github.com/benjamn/ast-types.git
-    cd ast-types
-    npm install .
+```sh
+npm install ast-types-x
+```
 
 Basic Usage
 ---
