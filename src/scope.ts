@@ -22,6 +22,7 @@ export interface Scope {
   declaresType(name: string): boolean
   declareTemporary(prefix?: string): namedTypes.Identifier;
   injectTemporary(identifier?: namedTypes.Identifier, init?: ExpressionKind | null): namedTypes.Identifier;
+  markAsStale(): void;
   scan(force?: boolean): void;
   getBindings(): ScopeBinding;
   getTypes(): any;
@@ -167,6 +168,10 @@ export default function scopePlugin(fork: Fork) {
 
     return identifier;
   };
+
+  Sp.markAsStale = function () {
+    this.didScan = false;
+  }
 
   Sp.scan = function(force) {
     if (force || !this.didScan) {
