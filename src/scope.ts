@@ -1,33 +1,38 @@
-import { NodePath } from "./node-path";
+import type { ExpressionKind } from "./gen/kinds";
+import type { namedTypes } from "./main";
+import type { NodePath } from "./node-path";
 import { maybeSetModuleExports } from "./shared";
-import typesPlugin, { Fork } from "./types";
+import type { Fork } from "./types";
+import typesPlugin from "./types";
 
 var hasOwn = Object.prototype.hasOwnProperty;
 
+export type ScopeBinding = Record<string, (NodePath | namedTypes.Identifier)[]>;
+
 export interface Scope {
   path: NodePath;
-  node: any;
+  node: NodePath['value'];
   isGlobal: boolean;
   depth: number;
-  parent: any;
-  bindings: any;
+  parent: Scope | null;
+  bindings: ScopeBinding;
   types: any;
   didScan: boolean;
-  declares(name: any): any
-  declaresType(name: any): any
-  declareTemporary(prefix?: any): any;
-  injectTemporary(identifier: any, init: any): any;
-  scan(force?: any): any;
-  getBindings(): any;
+  declares(name: string): boolean
+  declaresType(name: string): boolean
+  declareTemporary(prefix?: string): namedTypes.Identifier;
+  injectTemporary(identifier?: namedTypes.Identifier, init?: ExpressionKind | null): namedTypes.Identifier;
+  scan(force?: boolean): void;
+  getBindings(): ScopeBinding;
   getTypes(): any;
-  lookup(name: any): any;
-  lookupType(name: any): any;
-  getGlobalScope(): Scope;
+  lookup(name: string): Scope;
+  lookupType(name: string): Scope;
+  getGlobalScope(): Scope | null;
 }
 
 export interface ScopeConstructor {
-  new(path: NodePath, parentScope: any): Scope;
-  isEstablishedBy(node: any): any;
+  new(path: NodePath, parentScope?: Scope | null): Scope;
+  isEstablishedBy(node: NodePath['node']): boolean;
 }
 
 export default function scopePlugin(fork: Fork) {
@@ -39,7 +44,7 @@ export default function scopePlugin(fork: Fork) {
   var isArray = types.builtInTypes.array;
   var b = types.builders;
 
-  const Scope = function Scope(this: Scope, path: NodePath, parentScope: unknown) {
+  const Scope = function Scope(this: Scope, path: NodePath, parentScope?: Scope | null) {
     if (!(this instanceof Scope)) {
       throw new Error("Scope constructor cannot be invoked without 'new'");
     }
@@ -100,7 +105,7 @@ export default function scopePlugin(fork: Fork) {
     namedTypes.TSTypeParameter,
   );
 
-  Scope.isEstablishedBy = function(node) {
+  Scope.isEstablishedBy = function(node: NodePath['node']) {
     return ScopeType.check(node) || TypeParameterScopeType.check(node);
   };
 
@@ -140,10 +145,12 @@ export default function scopePlugin(fork: Fork) {
     }
 
     var name = prefix + index;
-    return this.bindings[name] = types.builders.identifier(name);
+    var identifier = types.builders.identifier(name);
+    this.bindings[name] = [identifier];
+    return identifier;
   };
 
-  Sp.injectTemporary = function(identifier, init) {
+  Sp.injectTemporary = function(identifier?: namedTypes.Identifier, init?: ExpressionKind | null) {
     identifier || (identifier = this.declareTemporary());
 
     var bodyPath = this.path.get("body");
@@ -186,7 +193,7 @@ export default function scopePlugin(fork: Fork) {
     return this.types;
   };
 
-  function scanScope(path: NodePath, bindings: any, scopeTypes: any) {
+  function scanScope(path: NodePath, bindings: ScopeBinding, scopeTypes: any) {
     var node = path.value;
     if (TypeParameterScopeType.check(node)) {
       const params = path.get('typeParameters', 'params');
@@ -208,7 +215,7 @@ export default function scopePlugin(fork: Fork) {
     }
   }
 
-  function recursiveScanScope(path: NodePath, bindings: any, scopeTypes: any) {
+  function recursiveScanScope(path: NodePath, bindings: ScopeBinding, scopeTypes: any) {
     var node = path.value;
 
     if (path.parent &&
@@ -286,7 +293,7 @@ export default function scopePlugin(fork: Fork) {
     return false;
   }
 
-  function recursiveScanChild(path: NodePath, bindings: any, scopeTypes: any) {
+  function recursiveScanChild(path: NodePath, bindings: ScopeBinding, scopeTypes: any) {
     var node = path.value;
 
     if (!node || Expression.check(node)) {
@@ -338,7 +345,7 @@ export default function scopePlugin(fork: Fork) {
     }
   }
 
-  function addPattern(patternPath: NodePath, bindings: any) {
+  function addPattern(patternPath: NodePath, bindings: ScopeBinding) {
     var pattern = patternPath.value;
     namedTypes.Pattern.assert(pattern);
 
@@ -357,7 +364,7 @@ export default function scopePlugin(fork: Fork) {
       namedTypes.ObjectPattern &&
       namedTypes.ObjectPattern.check(pattern)
     ) {
-      patternPath.get('properties').each(function(propertyPath: any) {
+      patternPath.get('properties').each(function(propertyPath: NodePath) {
         var property = propertyPath.value;
         if (namedTypes.Pattern.check(property)) {
           addPattern(propertyPath, bindings);
@@ -379,7 +386,7 @@ export default function scopePlugin(fork: Fork) {
       namedTypes.ArrayPattern &&
       namedTypes.ArrayPattern.check(pattern)
     ) {
-      patternPath.get('elements').each(function(elementPath: any) {
+      patternPath.get('elements').each(function(elementPath: NodePath) {
         var element = elementPath.value;
         if (namedTypes.Pattern.check(element)) {
           addPattern(elementPath, bindings);
@@ -434,22 +441,22 @@ export default function scopePlugin(fork: Fork) {
   }
 
   Sp.lookup = function(name) {
-    for (var scope = this; scope; scope = scope.parent)
+    for (var scope: Scope | null = this; scope; scope = scope.parent)
       if (scope.declares(name))
         break;
-    return scope;
+    return scope!;
   };
 
   Sp.lookupType = function(name) {
-    for (var scope = this; scope; scope = scope.parent)
+    for (var scope: Scope | null = this; scope; scope = scope.parent)
       if (scope.declaresType(name))
         break;
-    return scope;
+    return scope!;
   };
 
   Sp.getGlobalScope = function() {
-    var scope = this;
-    while (!scope.isGlobal)
+    var scope: Scope | null = this;
+    while (scope && !scope.isGlobal)
       scope = scope.parent;
     return scope;
   };

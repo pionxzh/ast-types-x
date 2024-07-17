@@ -973,7 +973,7 @@ describe("path.replace", function() {
   it("should support replacement with itself plus more in an array", function() {
     visit(ast, {
       visitVariableDeclaration: function(path) {
-        var scopeBody = path.scope.path.get("body", "body");
+        var scopeBody = path.scope!.path.get("body", "body");
 
         // This is contrived such that we just happen to be replacing
         // the same node we're currently processing, perhaps using a
@@ -1062,22 +1062,22 @@ describe("global scope", function() {
 
     visit(ast, {
       visitProgram: function(path) {
-        assert.strictEqual(path.scope.isGlobal, true);
+        assert.strictEqual(path.scope!.isGlobal, true);
         globalScope = path.scope;
         this.traverse(path);
       },
 
       visitFunctionDeclaration: function(path) {
         var node = path.node;
-        assert.strictEqual(path.scope.isGlobal, false);
+        assert.strictEqual(path.scope!.isGlobal, false);
 
         const name = node.id ? node.id.name : null;
         assert.strictEqual(name, "bar");
         assert.notStrictEqual(path.scope, globalScope);
-        assert.strictEqual(path.scope.isGlobal, false);
-        assert.strictEqual(path.scope.parent, globalScope);
+        assert.strictEqual(path.scope!.isGlobal, false);
+        assert.strictEqual(path.scope!.parent, globalScope);
 
-        assert.strictEqual(path.scope.getGlobalScope(), globalScope);
+        assert.strictEqual(path.scope!.getGlobalScope(), globalScope);
 
         this.traverse(path);
       }
@@ -1089,7 +1089,7 @@ describe("global scope", function() {
 
     visit(ast, {
       visitProgram: function(path) {
-        assert.strictEqual(path.scope.isGlobal, true);
+        assert.strictEqual(path.scope!.isGlobal, true);
         globalScope = path.scope;
         this.traverse(path);
       },
@@ -1097,13 +1097,13 @@ describe("global scope", function() {
       visitFunctionDeclaration: function(path) {
         assert.ok(globalScope.declares("foo"));
         assert.ok(globalScope.declares("bar"));
-        assert.strictEqual(path.scope.lookup("foo"), globalScope);
-        assert.strictEqual(path.scope.lookup("bar"), globalScope);
+        assert.strictEqual(path.scope!.lookup("foo"), globalScope);
+        assert.strictEqual(path.scope!.lookup("bar"), globalScope);
 
-        assert.ok(path.scope.declares("baz"));
-        assert.strictEqual(path.scope.lookup("baz"), path.scope);
+        assert.ok(path.scope!.declares("baz"));
+        assert.strictEqual(path.scope!.lookup("baz"), path.scope);
 
-        assert.strictEqual(path.scope.lookup("qux"), null);
+        assert.strictEqual(path.scope!.lookup("qux"), null);
         assert.strictEqual(globalScope.lookup("baz"), null);
 
         this.traverse(path);
@@ -1130,7 +1130,7 @@ describe("scope methods", function () {
 
     visit(ast, {
       visitProgram: function(path) {
-        var bindings = path.scope.getBindings();
+        var bindings = path.scope!.getBindings();
         assert.deepEqual(["bar", "foo", "nom"], Object.keys(bindings).sort());
         assert.equal(1, bindings.foo.length);
         assert.equal(1, bindings.bar.length);
@@ -1139,7 +1139,7 @@ describe("scope methods", function () {
       },
 
       visitFunctionDeclaration: function(path) {
-        var bindings = path.scope.getBindings();
+        var bindings = path.scope!.getBindings();
         assert.deepEqual(["baz"], Object.keys(bindings));
         assert.equal(1, bindings.baz.length);
         checked.push(path.node);
@@ -1151,7 +1151,7 @@ describe("scope methods", function () {
         if (n.CallExpression.check(node.argument) &&
             n.Identifier.check(node.argument.callee) &&
             node.argument.callee.name === "rom") {
-          var bindings = path.scope.getBindings();
+          var bindings = path.scope!.getBindings();
           assert.deepEqual(["pom", "rom", "zom"], Object.keys(bindings).sort());
           checked.push(node);
         }
@@ -1179,7 +1179,7 @@ describe("scope methods", function () {
 
     visit(ast, {
       visitProgram: function(path) {
-        names = Object.keys(path.scope.getBindings()).sort();
+        names = Object.keys(path.scope!.getBindings()).sort();
         this.traverse(path);
       }
     });
@@ -1201,7 +1201,7 @@ describe("scope methods", function () {
 
     visit(ast, {
       visitProgram: function(path) {
-        names = Object.keys(path.scope.getBindings()).sort();
+        names = Object.keys(path.scope!.getBindings()).sort();
         this.traverse(path);
       }
     });
@@ -1225,7 +1225,7 @@ function aFunction(arg1, { arg2 }) {
 
         visit(ast, {
           visitReturnStatement: function(path) {
-            const names = Object.keys(path.scope.getBindings()).sort();
+            const names = Object.keys(path.scope!.getBindings()).sort();
             assert.deepEqual(names, ["arg1", "arg2", "arg3", "arg4", "arg5"]);
             return false;
           }
@@ -1251,7 +1251,7 @@ function aFunction(arg1, { arg2 }) {
 
     visit(ast, {
       visitFunctionDeclaration: function(path) {
-        names = Object.keys(path.scope.lookup("zap").getBindings()).sort();
+        names = Object.keys(path.scope!.lookup("zap").getBindings()).sort();
         assert.deepEqual(names, ["zap"]);
         this.traverse(path);
       }
@@ -1277,7 +1277,7 @@ function aFunction(arg1, { arg2 }) {
 
     visit(ast, {
       visitCallExpression: function(path) {
-        names = Object.keys(path.scope.lookup("zap").getBindings()).sort();
+        names = Object.keys(path.scope!.lookup("zap").getBindings()).sort();
         assert.deepEqual(names, ["zap"]);
         this.traverse(path);
       }
@@ -1290,17 +1290,17 @@ function aFunction(arg1, { arg2 }) {
 
     visit(ast, {
       visitProgram: function(path) {
-        path.scope.injectTemporary();
-        bindings = path.scope.getBindings();
+        path.scope!.injectTemporary();
+        bindings = path.scope!.getBindings();
         assert.deepEqual(["bar", "foo", "nom", "t$0$0"], Object.keys(bindings).sort());
         this.traverse(path);
       },
 
       visitFunctionDeclaration: function(path) {
-        path.scope.injectTemporary(
-          path.scope.declareTemporary("t$")
+        path.scope!.injectTemporary(
+          path.scope!.declareTemporary("t$")
         )
-        bindings = path.scope.getBindings();
+        bindings = path.scope!.getBindings();
         assert.deepEqual(["baz", "t$1$0"], Object.keys(bindings));
         this.traverse(path);
       }
@@ -1318,11 +1318,11 @@ function aFunction(arg1, { arg2 }) {
         path.get("body").unshift(
           globalVarDecl = b.variableDeclaration("var", [
             b.variableDeclarator(
-              path.scope.declareTemporary("$"),
+              path.scope!.declareTemporary("$"),
               b.literal("global")
             ),
             b.variableDeclarator(
-              path.scope.declareTemporary("$"),
+              path.scope!.declareTemporary("$"),
               b.literal("global")
             )
           ])
@@ -1336,11 +1336,11 @@ function aFunction(arg1, { arg2 }) {
 
         var varDecl = b.variableDeclaration("var", [
           b.variableDeclarator(
-            path.scope.declareTemporary("$"),
+            path.scope!.declareTemporary("$"),
             b.literal(funcId.name + 1)
           ),
           b.variableDeclarator(
-            path.scope.declareTemporary("$"),
+            path.scope!.declareTemporary("$"),
             b.literal(funcId.name + 2)
           )
         ]);
@@ -1457,18 +1457,18 @@ describe("array and object pattern scope", function() {
     it("should handle object patterns variable declarations", function() {
       var scope = scopeFromPattern(objectPattern);
 
-      assert.strictEqual(scope.declares("a"), true);
-      assert.strictEqual(scope.declares("b"), false);
-      assert.strictEqual(scope.declares("c"), true);
-      assert.strictEqual(scope.declares("d"), true);
+      assert.strictEqual(scope!.declares("a"), true);
+      assert.strictEqual(scope!.declares("b"), false);
+      assert.strictEqual(scope!.declares("c"), true);
+      assert.strictEqual(scope!.declares("d"), true);
     });
 
     it("should handle array patterns in variable declarations", function() {
       var scope = scopeFromPattern(arrayPattern);
 
-      assert.strictEqual(scope.declares("foo"), true);
-      assert.strictEqual(scope.declares("bar"), true);
-      assert.strictEqual(scope.declares("baz"), true);
+      assert.strictEqual(scope!.declares("foo"), true);
+      assert.strictEqual(scope!.declares("bar"), true);
+      assert.strictEqual(scope!.declares("baz"), true);
     });
 
     it("should handle nested patterns in variable declarations", function() {
@@ -1478,14 +1478,14 @@ describe("array and object pattern scope", function() {
       );
 
       var scope = scopeFromPattern(objectPattern);
-      assert.strictEqual(scope.declares("a"), true);
-      assert.strictEqual(scope.declares("b"), false);
-      assert.strictEqual(scope.declares("c"), true);
-      assert.strictEqual(scope.declares("d"), true);
-      assert.strictEqual(scope.declares("e"), false);
-      assert.strictEqual(scope.declares("foo"), true);
-      assert.strictEqual(scope.declares("bar"), true);
-      assert.strictEqual(scope.declares("baz"), true);
+      assert.strictEqual(scope!.declares("a"), true);
+      assert.strictEqual(scope!.declares("b"), false);
+      assert.strictEqual(scope!.declares("c"), true);
+      assert.strictEqual(scope!.declares("d"), true);
+      assert.strictEqual(scope!.declares("e"), false);
+      assert.strictEqual(scope!.declares("foo"), true);
+      assert.strictEqual(scope!.declares("bar"), true);
+      assert.strictEqual(scope!.declares("baz"), true);
     });
   });
 
@@ -1521,18 +1521,18 @@ describe("array and object pattern scope", function() {
     it("should handle object patterns variable declarations", function() {
       var scope = scopeFromPattern(objectPattern);
 
-      assert.strictEqual(scope.declares("a"), true);
-      assert.strictEqual(scope.declares("b"), false);
-      assert.strictEqual(scope.declares("c"), true);
-      assert.strictEqual(scope.declares("d"), true);
+      assert.strictEqual(scope!.declares("a"), true);
+      assert.strictEqual(scope!.declares("b"), false);
+      assert.strictEqual(scope!.declares("c"), true);
+      assert.strictEqual(scope!.declares("d"), true);
     });
 
     it("should handle array patterns in variable declarations", function() {
       var scope = scopeFromPattern(arrayPattern);
 
-      assert.strictEqual(scope.declares("foo"), true);
-      assert.strictEqual(scope.declares("bar"), true);
-      assert.strictEqual(scope.declares("baz"), true);
+      assert.strictEqual(scope!.declares("foo"), true);
+      assert.strictEqual(scope!.declares("bar"), true);
+      assert.strictEqual(scope!.declares("baz"), true);
     });
 
     it("should handle nested patterns in variable declarations", function() {
@@ -1542,14 +1542,14 @@ describe("array and object pattern scope", function() {
       );
 
       var scope = scopeFromPattern(objectPattern);
-      assert.strictEqual(scope.declares("a"), true);
-      assert.strictEqual(scope.declares("b"), false);
-      assert.strictEqual(scope.declares("c"), true);
-      assert.strictEqual(scope.declares("d"), true);
-      assert.strictEqual(scope.declares("e"), false);
-      assert.strictEqual(scope.declares("foo"), true);
-      assert.strictEqual(scope.declares("bar"), true);
-      assert.strictEqual(scope.declares("baz"), true);
+      assert.strictEqual(scope!.declares("a"), true);
+      assert.strictEqual(scope!.declares("b"), false);
+      assert.strictEqual(scope!.declares("c"), true);
+      assert.strictEqual(scope!.declares("d"), true);
+      assert.strictEqual(scope!.declares("e"), false);
+      assert.strictEqual(scope!.declares("foo"), true);
+      assert.strictEqual(scope!.declares("bar"), true);
+      assert.strictEqual(scope!.declares("baz"), true);
     });
   });
 });

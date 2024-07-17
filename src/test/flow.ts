@@ -76,7 +76,7 @@ describe("flow types", function () {
       'new test<D>();',
       'new test<E, F>();',
     ].join("\n"));
-    
+
     const typeParamNames: any[] = []
 
     types.visit(program, {
@@ -94,10 +94,10 @@ describe("flow types", function () {
       "type Foo = {}",
       "interface Bar {}"
     ];
-  
+
     const ast = flowParser.parse(scope.join("\n"));
-  
-    it("should register flow types with the scope", function() {  
+
+    it("should register flow types with the scope", function() {
       types.visit(ast, {
         visitProgram(path: any) {
           assert(path.scope.declaresType('Foo'));
@@ -143,11 +143,11 @@ describe("flow types", function () {
 
     assertVisited(program, {
       visitFunctionDeclaration(path) {
-        assert.ok(path.scope.lookupType('T'));
+        assert.ok(path.scope!.lookupType('T'));
         this.traverse(path);
       },
       visitVariableDeclarator(path) {
-        assert.equal(path.scope.lookupType('T'), null);
+        assert.equal(path.scope!.lookupType('T'), null);
         this.traverse(path);
       }
     });
@@ -169,12 +169,12 @@ describe("flow types", function () {
 
     assertVisited(program, {
       visitFunctionExpression(path) {
-        assert.ok(path.scope.lookupType('T'));
+        assert.ok(path.scope!.lookupType('T'));
         this.traverse(path);
       },
       visitVariableDeclarator(path) {
         if (path.node.id.type === 'Identifier' && path.node.id.name === 'bar') {
-          assert.equal(path.scope.lookupType('T'), null);
+          assert.equal(path.scope!.lookupType('T'), null);
         }
         this.traverse(path);
       }
@@ -197,11 +197,11 @@ describe("flow types", function () {
 
     assertVisited(program, {
       visitArrowFunctionExpression(path) {
-        assert.ok(path.scope.lookupType('T'));
+        assert.ok(path.scope!.lookupType('T'));
         this.traverse(path);
       },
       visitVariableDeclarator(path) {
-        assert.equal(path.scope.lookupType('T'), null);
+        assert.equal(path.scope!.lookupType('T'), null);
         this.traverse(path);
       }
     });
@@ -223,11 +223,11 @@ describe("flow types", function () {
 
     assertVisited(program, {
       visitTypeParameterInstantiation(path) {
-        assert.ok(path.scope.lookupType('T'));
+        assert.ok(path.scope!.lookupType('T'));
         this.traverse(path);
       },
       visitVariableDeclarator(path) {
-        assert.equal(path.scope.lookupType('T'), null);
+        assert.equal(path.scope!.lookupType('T'), null);
         this.traverse(path);
       }
     });
@@ -249,13 +249,13 @@ describe("flow types", function () {
 
     assertVisited(program, {
       visitTypeParameterInstantiation(path) {
-        assert.ok(path.scope.lookupType('T'));
+        assert.ok(path.scope!.lookupType('T'));
         this.traverse(path);
       },
       visitVariableDeclarator(path) {
         if (path.node.id.type === 'Identifier' && path.node.id.name === 'bar') {
-          assert.equal(path.scope.lookupType('T'), null);
-          assert.equal(path.scope.lookupType('Foo'), null);
+          assert.equal(path.scope!.lookupType('T'), null);
+          assert.equal(path.scope!.lookupType('Foo'), null);
         }
         this.traverse(path);
       }
@@ -278,12 +278,12 @@ describe("flow types", function () {
 
     assertVisited(program, {
       visitTypeParameterInstantiation(path) {
-        assert.ok(path.scope.lookupType('T'));
+        assert.ok(path.scope!.lookupType('T'));
         this.traverse(path);
       },
       visitVariableDeclarator(path) {
-        assert.equal(path.scope.lookupType('T'), null);
-        assert.ok(path.scope.lookupType('Foo'));
+        assert.equal(path.scope!.lookupType('T'), null);
+        assert.ok(path.scope!.lookupType('Foo'));
         this.traverse(path);
       }
     });

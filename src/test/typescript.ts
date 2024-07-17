@@ -254,10 +254,10 @@ glob("**/*.ts", {
     it("should register typescript types with the scope", function() {
       visit(ast, {
         visitProgram(path) {
-          assert(path.scope.declaresType('Foo'));
-          assert(path.scope.declaresType('Bar'));
-          assert.equal(path.scope.lookupType('Foo').getTypes()['Foo'][0].parent.node.type, 'TSTypeAliasDeclaration');
-          assert.equal(path.scope.lookupType('Bar').getTypes()['Bar'][0].parent.node.type, 'TSInterfaceDeclaration');
+          assert(path.scope!.declaresType('Foo'));
+          assert(path.scope!.declaresType('Bar'));
+          assert.equal(path.scope!.lookupType('Foo').getTypes()['Foo'][0].parent.node.type, 'TSTypeAliasDeclaration');
+          assert.equal(path.scope!.lookupType('Bar').getTypes()['Bar'][0].parent.node.type, 'TSInterfaceDeclaration');
           return false;
         }
       });
@@ -292,11 +292,11 @@ glob("**/*.ts", {
 
       assertVisited(program, {
         visitFunctionDeclaration(path) {
-          assert.ok(path.scope.lookupType('T'));
+          assert.ok(path.scope!.lookupType('T'));
           this.traverse(path);
         },
         visitVariableDeclarator(path) {
-          assert.equal(path.scope.lookupType('T'), null);
+          assert.equal(path.scope!.lookupType('T'), null);
           this.traverse(path);
         }
       });
@@ -312,12 +312,12 @@ glob("**/*.ts", {
 
       assertVisited(program, {
         visitFunctionExpression(path) {
-          assert.ok(path.scope.lookupType('T'));
+          assert.ok(path.scope!.lookupType('T'));
           this.traverse(path);
         },
         visitVariableDeclarator(path) {
           if (path.node.id.type === 'Identifier' && path.node.id.name === 'bar') {
-            assert.equal(path.scope.lookupType('T'), null);
+            assert.equal(path.scope!.lookupType('T'), null);
           }
           this.traverse(path);
         }
@@ -334,11 +334,11 @@ glob("**/*.ts", {
 
       assertVisited(program, {
         visitArrowFunctionExpression(path) {
-          assert.ok(path.scope.lookupType('T'));
+          assert.ok(path.scope!.lookupType('T'));
           this.traverse(path);
         },
         visitVariableDeclarator(path) {
-          assert.equal(path.scope.lookupType('T'), null);
+          assert.equal(path.scope!.lookupType('T'), null);
           this.traverse(path);
         }
       });
@@ -354,11 +354,11 @@ glob("**/*.ts", {
 
       assertVisited(program, {
         visitTSTypeParameterInstantiation(path) {
-          assert.ok(path.scope.lookupType('T'));
+          assert.ok(path.scope!.lookupType('T'));
           this.traverse(path);
         },
         visitVariableDeclarator(path) {
-          assert.equal(path.scope.lookupType('T'), null);
+          assert.equal(path.scope!.lookupType('T'), null);
           this.traverse(path);
         }
       });
@@ -374,13 +374,13 @@ glob("**/*.ts", {
 
       assertVisited(program, {
         visitTSTypeParameterInstantiation(path) {
-          assert.ok(path.scope.lookupType('T'));
+          assert.ok(path.scope!.lookupType('T'));
           this.traverse(path);
         },
         visitVariableDeclarator(path) {
           if (path.node.id.type === 'Identifier' && path.node.id.name === 'bar') {
-            assert.equal(path.scope.lookupType('T'), null);
-            assert.equal(path.scope.lookupType('Foo'), null);
+            assert.equal(path.scope!.lookupType('T'), null);
+            assert.equal(path.scope!.lookupType('Foo'), null);
           }
           this.traverse(path);
         }
@@ -397,12 +397,12 @@ glob("**/*.ts", {
 
       assertVisited(program, {
         visitTSTypeParameterInstantiation(path) {
-          assert.ok(path.scope.lookupType('T'));
+          assert.ok(path.scope!.lookupType('T'));
           this.traverse(path);
         },
         visitVariableDeclarator(path) {
-          assert.equal(path.scope.lookupType('T'), null);
-          assert.ok(path.scope.lookupType('Foo'));
+          assert.equal(path.scope!.lookupType('T'), null);
+          assert.ok(path.scope!.lookupType('Foo'));
           this.traverse(path);
         }
       });

@@ -7,7 +7,7 @@ import { maybeSetModuleExports } from "./shared";
 export interface NodePath<N = any, V = any> extends Path<V> {
   node: N;
   parent: any;
-  scope: any;
+  scope: Scope | null;
   replace: Path['replace'];
   prune(...args: any[]): any;
   _computeNode(): any;
@@ -86,6 +86,7 @@ export default function nodePathPlugin(fork: Fork): NodePathConstructor {
   NPp.replace = function () {
     delete this.node;
     delete this.parent;
+    // @ts-ignore
     delete this.scope;
     return Path.prototype.replace.apply(this, arguments);
   };
