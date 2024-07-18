@@ -32,5 +32,5 @@ jobs:
     - name: Install, build and test
       run: |
         pnpm install
-        pnpm run build --if-present
+        pnpm run build
         pnpm test
