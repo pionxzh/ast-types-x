@@ -51,8 +51,8 @@ export default function scopePlugin(fork: Fork) {
     if (!(this instanceof Scope)) {
       throw new Error("Scope constructor cannot be invoked without 'new'");
     }
-    if (!TypeParameterScopeType.check(path.value)) {
-      ScopeType.assert(path.value);
+    if (!TypeParameterScopeType.check(path.value) && !ScopeType.check(path.value) && !isForScopeType(path.value)) {
+      throw new Error("Invalid scope node type " + (path.value as any).type);
     }
 
     var depth: number;
@@ -88,8 +88,27 @@ export default function scopePlugin(fork: Fork) {
 
     // In case you didn't know, the caught parameter shadows any variable
     // of the same name in an outer scope.
-    namedTypes.CatchClause
+    namedTypes.CatchClause,
+
+    // The following are statements that create block scopes
+    namedTypes.IfStatement,
+    namedTypes.TryStatement,
+
+    // Add BlockStatement as it can introduce a scope when using let/const
+    namedTypes.BlockStatement
   );
+
+  var ForLoopScopeType = Type.or(namedTypes.ForStatement, namedTypes.ForInStatement, namedTypes.ForOfStatement);
+  var isForScopeType = function isScopeType(node: NodePath['node']) {
+    if (ForLoopScopeType.check(node)) {
+      const variableDeclarator = node.init || node.left;
+      return variableDeclarator
+        && namedTypes.VariableDeclaration.check(variableDeclarator)
+        && variableDeclarator.kind !== "var";
+    }
+
+    return false;
+  }
 
   // These types introduce scopes that are restricted to type parameters in
   // Flow (this doesn't apply to ECMAScript).
@@ -109,7 +128,7 @@ export default function scopePlugin(fork: Fork) {
   );
 
   Scope.isEstablishedBy = function(node: NodePath['node']) {
-    return ScopeType.check(node) || TypeParameterScopeType.check(node);
+    return ScopeType.check(node) || TypeParameterScopeType.check(node) || isForScopeType(node);
   };
 
   var Sp: Scope = Scope.prototype;
@@ -220,6 +239,10 @@ export default function scopePlugin(fork: Fork) {
         recursiveScanScope(path, bindings, scopeTypes);
       }
     }
+
+    if (isForScopeType(node)) {
+      recursiveScanScope(path, bindings, scopeTypes);
+    }
   }
 
   function recursiveScanScope(path: NodePath, bindings: ScopeBinding, scopeTypes: ScopeTypes) {
@@ -324,7 +347,7 @@ export default function scopePlugin(fork: Fork) {
     ) {
       addTypePattern(path.get("id"), scopeTypes);
 
-    } else if (ScopeType.check(node)) {
+    } else if (ScopeType.check(node) || isForScopeType(node)) {
       if (
         namedTypes.CatchClause.check(node) &&
         // TODO Broaden this to accept any pattern.
