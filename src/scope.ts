@@ -9,6 +9,8 @@ var hasOwn = Object.prototype.hasOwnProperty;
 
 export type ScopeBinding = Record<string, (NodePath | namedTypes.Identifier)[]>;
 
+export type ScopeTypes = Record<string, NodePath[]>;
+
 export interface Scope {
   path: NodePath;
   node: NodePath['value'];
@@ -16,7 +18,7 @@ export interface Scope {
   depth: number;
   parent: Scope | null;
   bindings: ScopeBinding;
-  types: any;
+  types: ScopeTypes;
   didScan: boolean;
   declares(name: string): boolean
   declaresType(name: string): boolean
@@ -25,7 +27,7 @@ export interface Scope {
   markAsStale(): void;
   scan(force?: boolean): void;
   getBindings(): ScopeBinding;
-  getTypes(): any;
+  getTypes(): ScopeTypes;
   lookup(name: string): Scope;
   lookupType(name: string): Scope;
   getGlobalScope(): Scope | null;
@@ -198,7 +200,7 @@ export default function scopePlugin(fork: Fork) {
     return this.types;
   };
 
-  function scanScope(path: NodePath, bindings: ScopeBinding, scopeTypes: any) {
+  function scanScope(path: NodePath, bindings: ScopeBinding, scopeTypes: ScopeTypes) {
     var node = path.value;
     if (TypeParameterScopeType.check(node)) {
       const params = path.get('typeParameters', 'params');
@@ -220,7 +222,7 @@ export default function scopePlugin(fork: Fork) {
     }
   }
 
-  function recursiveScanScope(path: NodePath, bindings: ScopeBinding, scopeTypes: any) {
+  function recursiveScanScope(path: NodePath, bindings: ScopeBinding, scopeTypes: ScopeTypes) {
     var node = path.value;
 
     if (path.parent &&
@@ -298,7 +300,7 @@ export default function scopePlugin(fork: Fork) {
     return false;
   }
 
-  function recursiveScanChild(path: NodePath, bindings: ScopeBinding, scopeTypes: any) {
+  function recursiveScanChild(path: NodePath, bindings: ScopeBinding, scopeTypes: ScopeTypes) {
     var node = path.value;
 
     if (!node || Expression.check(node)) {
@@ -421,27 +423,27 @@ export default function scopePlugin(fork: Fork) {
     }
   }
 
-  function addTypePattern(patternPath: NodePath, types: any) {
+  function addTypePattern(patternPath: NodePath, scopeTypes: ScopeTypes) {
     var pattern = patternPath.value;
     namedTypes.Pattern.assert(pattern);
 
     if (namedTypes.Identifier.check(pattern)) {
-      if (hasOwn.call(types, pattern.name)) {
-        types[pattern.name].push(patternPath);
+      if (hasOwn.call(scopeTypes, pattern.name)) {
+        scopeTypes[pattern.name].push(patternPath);
       } else {
-        types[pattern.name] = [patternPath];
+        scopeTypes[pattern.name] = [patternPath];
       }
     }
   }
 
-  function addTypeParameter(parameterPath: NodePath, types: any) {
+  function addTypeParameter(parameterPath: NodePath, scopeTypes: ScopeTypes) {
     var parameter = parameterPath.value;
     FlowOrTSTypeParameterType.assert(parameter);
 
-    if (hasOwn.call(types, parameter.name)) {
-      types[parameter.name].push(parameterPath);
+    if (hasOwn.call(scopeTypes, parameter.name)) {
+      scopeTypes[parameter.name].push(parameterPath);
     } else {
-      types[parameter.name] = [parameterPath];
+      scopeTypes[parameter.name] = [parameterPath];
     }
   }
 
