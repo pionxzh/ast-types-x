@@ -139,7 +139,7 @@ export default function nodePathPlugin(fork: Fork): NodePathConstructor {
     var scope = pp && pp.scope;
 
     if (n.Node.check(value) &&
-      Scope.isEstablishedBy(value)) {
+      Scope.isEstablishedBy(this)) {
       scope = new Scope(this, scope);
     }
 

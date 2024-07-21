@@ -38,7 +38,8 @@
   "scripts": {
     "gen": "ts-node --transpile-only script/gen-types.ts",
     "test": "npm run gen && npm run build && script/run-tests.sh",
-    "run-test": "mocha --reporter spec --full-trace lib/test/run.js",
+    "test:watch": "mocha --reporter spec --full-trace src/test/run.ts --watch --watch-files src",
+    "run-test": "npm run gen && npm run build && mocha --reporter spec --full-trace lib/test/run.js",
     "clean": "rimraf lib/",
     "build": "tsc",
     "prepare": "npm run clean && npm run build"
@@ -63,6 +64,7 @@
     "reify": "0.20.12",
     "rimraf": "6.0.1",
     "ts-node": "10.9.2",
+    "tsx": "^4.16.2",
     "typescript": "5.5.3"
   },
   "engines": {

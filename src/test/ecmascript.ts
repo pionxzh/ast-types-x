@@ -1373,6 +1373,7 @@ describe("catch block scope", function() {
     "    bar();",
     "  } catch (e) {",
     "    var f = e + 1;",
+    "    let h = e + 2;",
     "    return function(g) {",
     "      return e + g;",
     "    };",
@@ -1386,6 +1387,8 @@ describe("catch block scope", function() {
   var fooScope = fooPath.scope;
   var catchPath = fooPath.get("body", "body", 0, "handler");
   var catchScope = catchPath.scope;
+  var catchBlockPath = catchPath.get("body");
+  var catchBlockScope = catchBlockPath.scope;
 
   it("should not affect outer scope declarations", function() {
     n.FunctionDeclaration.assert(fooScope.node);
@@ -1400,10 +1403,11 @@ describe("catch block scope", function() {
     assert.strictEqual(catchScope.declares("f"), false);
     assert.strictEqual(catchScope.lookup("e"), catchScope);
     assert.strictEqual(catchScope.lookup("f"), fooScope);
+    assert.strictEqual(catchBlockScope.lookup("h"), catchBlockScope);
   });
 
   it("should shadow only the parameter in nested scopes", function() {
-    var closurePath = catchPath.get("body", "body", 1, "argument");
+    var closurePath = catchPath.get("body", "body", 2, "argument");
     var closureScope = closurePath.scope;
     n.FunctionExpression.assert(closureScope.node);
     assert.strictEqual(closureScope.declares("e"), false);
