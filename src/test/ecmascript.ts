@@ -1374,6 +1374,7 @@ describe("catch block scope", function() {
     "    var f = e + 1;",
     "    let h = e + 2;",
     "    return function(g) {",
+    "      let g = e + 3;",
     "      return e + g;",
     "    };",
     "  }",
@@ -1409,12 +1410,17 @@ describe("catch block scope", function() {
     var closurePath = catchPath.get("body", "body", 2, "argument");
     var closureScope = closurePath.scope;
     n.FunctionExpression.assert(closureScope.node);
+
+    var closureBlockPath = closurePath.get("body");
+    var closureBlockScope = closureBlockPath.scope;
     assert.strictEqual(closureScope.declares("e"), false);
     assert.strictEqual(closureScope.declares("f"), false);
     assert.strictEqual(closureScope.declares("g"), true);
+    assert.strictEqual(closureBlockScope.declares("g"), true);
     assert.strictEqual(closureScope.lookup("g"), closureScope);
     assert.strictEqual(closureScope.lookup("e"), catchScope);
     assert.strictEqual(closureScope.lookup("f"), fooScope);
+    assert.strictEqual(closureBlockScope.lookup("g"), closureBlockScope);
   });
 
   it("should support destructuring in catch parameters", function() {
@@ -1423,7 +1429,6 @@ function foo(e) {
   try {
     bar();
   } catch ({ e, f: g }) {
-    return e;
   }
 }
 `;
