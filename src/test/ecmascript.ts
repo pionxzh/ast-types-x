@@ -274,7 +274,6 @@ describe("shallow and deep checks", function() {
   });
 });
 
-
 describe("whole-program validation", function() {
   this.timeout(20000);
 
@@ -1417,6 +1416,28 @@ describe("catch block scope", function() {
     assert.strictEqual(closureScope.lookup("e"), catchScope);
     assert.strictEqual(closureScope.lookup("f"), fooScope);
   });
+
+  it("should support destructuring in catch parameters", function() {
+    const code = `
+function foo(e) {
+  try {
+    bar();
+  } catch ({ e, f: g }) {
+    return e;
+  }
+}
+`;
+    const ast = parse(code);
+    const path = new NodePath(ast);
+    const fooPath = path.get("body", 0);
+    const catchPath = fooPath.get("body", "body", 0, "handler");
+    const catchScope = catchPath.scope;
+
+    n.CatchClause.assert(catchScope.node);
+    assert.strictEqual(catchScope.declares("e"), true);
+    assert.strictEqual(catchScope.declares("f"), false);
+    assert.strictEqual(catchScope.declares("g"), true);
+  });
 });
 
 describe("array and object pattern scope", function() {
@@ -1482,6 +1503,52 @@ describe("array and object pattern scope", function() {
       );
 
       var scope = scopeFromPattern(objectPattern);
+      assert.strictEqual(scope!.declares("a"), true);
+      assert.strictEqual(scope!.declares("b"), false);
+      assert.strictEqual(scope!.declares("c"), true);
+      assert.strictEqual(scope!.declares("d"), true);
+      assert.strictEqual(scope!.declares("e"), false);
+      assert.strictEqual(scope!.declares("foo"), true);
+      assert.strictEqual(scope!.declares("bar"), true);
+      assert.strictEqual(scope!.declares("baz"), true);
+    });
+  });
+
+  describe('babel', function() {
+    it("should handle object patterns variable declarations", function() {
+      const code = `
+var {a, b: c, ...d} = {};
+`;
+      var path = new NodePath(babylonParse(code));
+      var scope = path.get("body").scope;
+      assert.strictEqual(scope!.declares("a"), true);
+      assert.strictEqual(scope!.declares("b"), false);
+      assert.strictEqual(scope!.declares("c"), true);
+      assert.strictEqual(scope!.declares("d"), true);
+    });
+
+    it("should handle array patterns in variable declarations", function() {
+      const code = `
+var [foo, bar, ...baz] = [];
+`;
+      var path = new NodePath(babylonParse(code));
+      var scope = path.get("body").scope;
+      assert.strictEqual(scope!.declares("foo"), true);
+      assert.strictEqual(scope!.declares("bar"), true);
+      assert.strictEqual(scope!.declares("baz"), true);
+    });
+
+    it("should handle nested patterns in variable declarations", function() {
+      const code = `
+var {
+  a,
+  b: c,
+  e: [foo, bar, ...baz],
+  ...d
+} = {};
+`;
+      var path = new NodePath(babylonParse(code));
+      var scope = path.get("body").scope;
       assert.strictEqual(scope!.declares("a"), true);
       assert.strictEqual(scope!.declares("b"), false);
       assert.strictEqual(scope!.declares("c"), true);
