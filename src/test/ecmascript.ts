@@ -1394,7 +1394,8 @@ describe("catch block scope", function() {
     n.FunctionDeclaration.assert(fooScope.node);
     assert.strictEqual(fooScope.declares("e"), true);
     assert.strictEqual(fooScope.declares("f"), true);
-    assert.strictEqual(fooScope.lookup("e"), fooScope);
+    assert.strictEqual(catchBlockScope.declares("f"), false);
+    assert.strictEqual(catchBlockScope.lookup("f"), fooScope);
   });
 
   it("should declare only the guard parameter", function() {
@@ -1417,9 +1418,9 @@ describe("catch block scope", function() {
     assert.strictEqual(closureScope.declares("f"), false);
     assert.strictEqual(closureScope.declares("g"), true);
     assert.strictEqual(closureBlockScope.declares("g"), true);
-    assert.strictEqual(closureScope.lookup("g"), closureScope);
     assert.strictEqual(closureScope.lookup("e"), catchScope);
     assert.strictEqual(closureScope.lookup("f"), fooScope);
+    assert.strictEqual(closureScope.lookup("g"), closureScope);
     assert.strictEqual(closureBlockScope.lookup("g"), closureBlockScope);
   });
 

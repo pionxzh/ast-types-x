@@ -296,10 +296,9 @@ export default function scopePlugin(fork: Fork) {
       }
     }
     if (ScopeType.check(node)) {
-      if (namedTypes.CatchClause.check(node) && node.param !== null) {
+      if (namedTypes.CatchClause.check(node)) {
         // A catch clause establishes a new scope but the only variable
-        // bound in that scope is the catch parameter. Any other
-        // declarations create bindings in the outer scope.
+        // bound in that scope is the catch parameter.
         addPattern(path.get("param"), bindings);
       } else {
         this.recursiveScanScope(path, bindings, scopeTypes);
@@ -430,29 +429,12 @@ export default function scopePlugin(fork: Fork) {
     ) {
       addTypePattern(path.get("id"), scopeTypes);
 
+
+    } else if (namedTypes.CatchClause.check(node)) {
+      this.recursiveScanScope(path.get("body"), bindings, scopeTypes);
+
     } else if (ScopeType.check(node) || isForScopeType(node)) {
-      if (
-        namedTypes.CatchClause.check(node) &&
-        // TODO Broaden this to accept any pattern.
-        namedTypes.Identifier.check(node.param)
-      ) {
-        var catchParamName = node.param.name;
-        var hadBinding = hasOwn.call(bindings, catchParamName);
-
-        // Any declarations that occur inside the catch body that do
-        // not have the same name as the catch parameter should count
-        // as bindings in the outer scope.
-        this.recursiveScanScope(path.get("body"), bindings, scopeTypes);
-
-        // If a new binding matching the catch parameter name was
-        // created while scanning the catch body, ignore it because it
-        // actually refers to the catch parameter and not the outer
-        // scope that we're currently scanning.
-        if (!hadBinding) {
-          delete bindings[catchParamName];
-        }
-      }
-
+      // Skip scanning, it belongs another scope.
     } else {
       this.recursiveScanScope(path, bindings, scopeTypes);
     }
