@@ -7,7 +7,7 @@ import typesPlugin from "./types";
 
 var hasOwn = Object.prototype.hasOwnProperty;
 
-export type ScopeType = "global" | "function" | "block" | "switch" | "catch" | "with" | "for" | "class"
+export type ScopeType = "global" | "function" | "block" | "switch" | "catch" | "with" | "for" | "class" | "type";
 
 export type ScopeBinding = Record<string, (NodePath | namedTypes.Identifier)[]>;
 
@@ -267,6 +267,10 @@ export default function scopePlugin(fork: Fork) {
 
     if (namedTypes.ClassDeclaration.check(node) || namedTypes.ClassExpression.check(node)) {
       return "class";
+    }
+
+    if (TypeParameterScopeType.check(node)) {
+      return "type";
     }
 
     // @ts-ignore
