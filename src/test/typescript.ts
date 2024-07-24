@@ -413,5 +413,19 @@ glob("**/*.ts", {
         }
       });
     });
+
+    it("visits type parameters of call expressions", function () {
+      const program = babelParse([
+        "fn<T>(808)",
+      ].join("\n"), {
+        plugins: ["typescript"]
+      });
+
+      assertVisited(program, {
+        visitTSTypeParameterInstantiation(path) {
+          this.traverse(path);
+        }
+      });
+    });
   });
 });

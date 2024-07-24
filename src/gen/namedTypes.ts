@@ -300,7 +300,11 @@ export namespace namedTypes {
     typeArguments?: null | K.TypeParameterInstantiationKind;
   }
 
-  export interface CallExpression extends Omit<Expression, "type">, Omit<ChainElement, "type"> {
+  export interface TSHasOptionalTypeParameterInstantiation {
+    typeParameters?: K.TSTypeParameterInstantiationKind | null;
+  }
+
+  export interface CallExpression extends Omit<Expression, "type">, Omit<ChainElement, "type">, TSHasOptionalTypeParameterInstantiation {
     type: "CallExpression";
     callee: K.ExpressionKind;
     arguments: (K.ExpressionKind | K.SpreadElementKind)[];
@@ -750,10 +754,6 @@ export namespace namedTypes {
   }
 
   export interface TSType extends Node {}
-
-  export interface TSHasOptionalTypeParameterInstantiation {
-    typeParameters?: K.TSTypeParameterInstantiationKind | null;
-  }
 
   export interface TSExpressionWithTypeArguments extends Omit<TSType, "type">, TSHasOptionalTypeParameterInstantiation {
     type: "TSExpressionWithTypeArguments";
@@ -1778,6 +1778,7 @@ export namespace namedTypes {
   export let LogicalExpression: Type<LogicalExpression>;
   export let ConditionalExpression: Type<ConditionalExpression>;
   export let NewExpression: Type<NewExpression>;
+  export let TSHasOptionalTypeParameterInstantiation: Type<TSHasOptionalTypeParameterInstantiation>;
   export let CallExpression: Type<CallExpression>;
   export let RestElement: Type<RestElement>;
   export let TypeAnnotation: Type<TypeAnnotation>;
@@ -1853,7 +1854,6 @@ export namespace namedTypes {
   export let TSTypeParameterInstantiation: Type<TSTypeParameterInstantiation>;
   export let ClassImplements: Type<ClassImplements>;
   export let TSType: Type<TSType>;
-  export let TSHasOptionalTypeParameterInstantiation: Type<TSHasOptionalTypeParameterInstantiation>;
   export let TSExpressionWithTypeArguments: Type<TSExpressionWithTypeArguments>;
   export let Flow: Type<Flow>;
   export let FlowType: Type<FlowType>;
@@ -2074,6 +2074,7 @@ export interface NamedTypes {
   LogicalExpression: Type<namedTypes.LogicalExpression>;
   ConditionalExpression: Type<namedTypes.ConditionalExpression>;
   NewExpression: Type<namedTypes.NewExpression>;
+  TSHasOptionalTypeParameterInstantiation: Type<namedTypes.TSHasOptionalTypeParameterInstantiation>;
   CallExpression: Type<namedTypes.CallExpression>;
   RestElement: Type<namedTypes.RestElement>;
   TypeAnnotation: Type<namedTypes.TypeAnnotation>;
@@ -2149,7 +2150,6 @@ export interface NamedTypes {
   TSTypeParameterInstantiation: Type<namedTypes.TSTypeParameterInstantiation>;
   ClassImplements: Type<namedTypes.ClassImplements>;
   TSType: Type<namedTypes.TSType>;
-  TSHasOptionalTypeParameterInstantiation: Type<namedTypes.TSHasOptionalTypeParameterInstantiation>;
   TSExpressionWithTypeArguments: Type<namedTypes.TSExpressionWithTypeArguments>;
   Flow: Type<namedTypes.Flow>;
   FlowType: Type<namedTypes.FlowType>;

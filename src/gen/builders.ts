@@ -598,6 +598,7 @@ export interface CallExpressionBuilder {
       loc?: K.SourceLocationKind | null;
       optional?: boolean;
       typeArguments?: null | K.TypeParameterInstantiationKind;
+      typeParameters?: K.TSTypeParameterInstantiationKind | null;
     }
   ): namedTypes.CallExpression;
 }
@@ -1206,6 +1207,7 @@ export interface OptionalCallExpressionBuilder {
       loc?: K.SourceLocationKind | null;
       optional?: boolean;
       typeArguments?: null | K.TypeParameterInstantiationKind;
+      typeParameters?: K.TSTypeParameterInstantiationKind | null;
     }
   ): namedTypes.OptionalCallExpression;
 }
