@@ -138,7 +138,7 @@ export default function scopePlugin(fork: Fork) {
     namedTypes.TSTypeParameter,
   );
 
-  Scope.isEstablishedBy = function(path: NodePath) {
+  Scope.isEstablishedBy = function (path: NodePath) {
     const node = path.value;
     if (namedTypes.BlockStatement.check(node) && namedTypes.Function.check(path.parentPath.value)) {
       return false;
@@ -152,17 +152,17 @@ export default function scopePlugin(fork: Fork) {
   // Will be overridden after an instance lazily calls scanScope.
   Sp.didScan = false;
 
-  Sp.declares = function(name) {
+  Sp.declares = function (name) {
     this.scan();
     return hasOwn.call(this.bindings, name);
   };
 
-  Sp.declaresType = function(name) {
+  Sp.declaresType = function (name) {
     this.scan();
     return hasOwn.call(this.types, name);
   };
 
-  Sp.declareTemporary = function(prefix) {
+  Sp.declareTemporary = function (prefix) {
     if (prefix) {
       if (!/^[a-z$_]/i.test(prefix)) {
         throw new Error("");
@@ -188,7 +188,7 @@ export default function scopePlugin(fork: Fork) {
     return identifier;
   };
 
-  Sp.injectTemporary = function(identifier?: namedTypes.Identifier, init?: ExpressionKind | null) {
+  Sp.injectTemporary = function (identifier?: namedTypes.Identifier, init?: ExpressionKind | null) {
     identifier || (identifier = this.declareTemporary());
 
     var bodyPath = this.path.get("body");
@@ -198,8 +198,8 @@ export default function scopePlugin(fork: Fork) {
 
     bodyPath.unshift(
       b.variableDeclaration(
-      "var",
-      [b.variableDeclarator(identifier, init || null)]
+        "var",
+        [b.variableDeclarator(identifier, init || null)]
       )
     );
 
@@ -210,7 +210,7 @@ export default function scopePlugin(fork: Fork) {
     this.didScan = false;
   }
 
-  Sp.scan = function(force) {
+  Sp.scan = function (force) {
     if (force || !this.didScan) {
       for (var name in this.bindings) {
         // Empty out this.bindings, just in cases.
@@ -373,7 +373,7 @@ export default function scopePlugin(fork: Fork) {
         // ImportNamespaceSpecifier and ImportDefaultSpecifier nodes.
         // ESTree/Acorn/ESpree use .local for all three node types.
         path.get(node.local ? "local" :
-        node.name ? "name" : "id"),
+          node.name ? "name" : "id"),
         bindings
       );
 
@@ -427,9 +427,9 @@ export default function scopePlugin(fork: Fork) {
 
     } else if (
       (namedTypes.InterfaceDeclaration &&
-       namedTypes.InterfaceDeclaration.check(node)) ||
+        namedTypes.InterfaceDeclaration.check(node)) ||
       (namedTypes.TSInterfaceDeclaration &&
-       namedTypes.TSInterfaceDeclaration.check(node))
+        namedTypes.TSInterfaceDeclaration.check(node))
     ) {
       addTypePattern(path.get("id"), scopeTypes);
 
@@ -470,7 +470,7 @@ export default function scopePlugin(fork: Fork) {
         } else if (
           namedTypes.Property.check(property) ||
           (namedTypes.ObjectProperty &&
-           namedTypes.ObjectProperty.check(property))
+            namedTypes.ObjectProperty.check(property))
         ) {
           addPattern(propertyPath.get('value'), bindings);
         } else if (
@@ -505,11 +505,11 @@ export default function scopePlugin(fork: Fork) {
 
     } else if (
       (namedTypes.SpreadElementPattern &&
-       namedTypes.SpreadElementPattern.check(pattern)) ||
+        namedTypes.SpreadElementPattern.check(pattern)) ||
       (namedTypes.RestElement &&
-       namedTypes.RestElement.check(pattern)) ||
+        namedTypes.RestElement.check(pattern)) ||
       (namedTypes.SpreadPropertyPattern &&
-       namedTypes.SpreadPropertyPattern.check(pattern))
+        namedTypes.SpreadPropertyPattern.check(pattern))
     ) {
       addPattern(patternPath.get('argument'), bindings);
     }
@@ -539,21 +539,21 @@ export default function scopePlugin(fork: Fork) {
     }
   }
 
-  Sp.lookup = function(name) {
+  Sp.lookup = function (name) {
     for (var scope: Scope | null = this; scope; scope = scope.parent)
       if (scope.declares(name))
         break;
     return scope!;
   };
 
-  Sp.lookupType = function(name) {
+  Sp.lookupType = function (name) {
     for (var scope: Scope | null = this; scope; scope = scope.parent)
       if (scope.declaresType(name))
         break;
     return scope!;
   };
 
-  Sp.getGlobalScope = function() {
+  Sp.getGlobalScope = function () {
     var scope: Scope | null = this;
     while (scope && !scope.isGlobal)
       scope = scope.parent;

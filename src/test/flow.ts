@@ -97,7 +97,7 @@ describe("flow types", function () {
 
     const ast = flowParser.parse(scope.join("\n"));
 
-    it("should register flow types with the scope", function() {
+    it("should register flow types with the scope", function () {
       types.visit(ast, {
         visitProgram(path: any) {
           assert(path.scope.declaresType('Foo'));

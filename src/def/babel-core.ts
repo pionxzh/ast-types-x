@@ -196,11 +196,11 @@ export default function (fork: Fork) {
     .field("generator", Boolean, defaults["false"])
     .field("async", Boolean, defaults["false"])
     .field("accessibility", // TypeScript
-           or(def("Literal"), null),
-           defaults["null"])
+      or(def("Literal"), null),
+      defaults["null"])
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   def("ObjectProperty")
     .bases("Node")
@@ -208,8 +208,8 @@ export default function (fork: Fork) {
     .field("key", or(def("Literal"), def("Identifier"), def("Expression")))
     .field("value", or(def("Expression"), def("Pattern")))
     .field("accessibility", // TypeScript
-           or(def("Literal"), null),
-           defaults["null"])
+      or(def("Literal"), null),
+      defaults["null"])
     .field("computed", Boolean, defaults["false"]);
 
   var ClassBodyElement = or(
@@ -252,8 +252,9 @@ export default function (fork: Fork) {
     ))
     .field("value", or(def("Expression"), null), defaults["null"]);
 
-  ["ClassMethod",
-   "ClassPrivateMethod",
+  [
+    "ClassMethod",
+    "ClassPrivateMethod",
   ].forEach(typeName => {
     def(typeName)
       .field("kind", or("get", "set", "method", "constructor"), () => "method")
@@ -262,9 +263,10 @@ export default function (fork: Fork) {
       .field("access", or("public", "private", "protected", null), defaults["null"])
   });
 
-  ["ClassMethod",
-   "ClassPrivateMethod",
-   "ClassAccessorProperty",
+  [
+    "ClassMethod",
+    "ClassPrivateMethod",
+    "ClassAccessorProperty",
   ].forEach(typeName => {
     def(typeName)
       .field("computed", Boolean, defaults["false"])
@@ -294,8 +296,8 @@ export default function (fork: Fork) {
     .build("properties")
     .field("properties", [ObjectPatternProperty])
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   def("SpreadProperty")
     .bases("Node")

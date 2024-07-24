@@ -131,7 +131,7 @@ glob("**/input.ts", {
         options &&
         options.throws &&
         normalizeErrorString(options.throws) ===
-          normalizeErrorString(error.message)
+        normalizeErrorString(error.message)
       ) {
         return null;
       }
@@ -257,7 +257,7 @@ glob("**/*.ts", {
       plugins: ['typescript']
     });
 
-    it("should register typescript types with the scope", function() {
+    it("should register typescript types with the scope", function () {
       visit(ast, {
         visitProgram(path) {
           assert(path.scope!.declaresType('Foo'));

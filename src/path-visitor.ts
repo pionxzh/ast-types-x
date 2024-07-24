@@ -33,7 +33,7 @@ export interface PathVisitorConstructor extends PathVisitorStatics {
   new(): PathVisitor;
 }
 
-export interface Visitor extends PathVisitor {}
+export interface Visitor extends PathVisitor { }
 
 export interface VisitorConstructor extends PathVisitorStatics {
   new(): Visitor;
@@ -56,7 +56,7 @@ export interface SharedContextMethods {
   abort(): void;
 }
 
-export interface Context extends Omit<PathVisitor, "visit" | "reset">, SharedContextMethods {}
+export interface Context extends Omit<PathVisitor, "visit" | "reset">, SharedContextMethods { }
 
 export default function pathVisitorPlugin(fork: Fork) {
   var types = fork.use(typesPlugin);
@@ -180,7 +180,7 @@ export default function pathVisitorPlugin(fork: Fork) {
     }
 
     if (!(args[0] instanceof NodePath)) {
-      args[0] = new NodePath({root: args[0]}).get("root");
+      args[0] = new NodePath({ root: args[0] }).get("root");
     }
 
     // Called with the same arguments as .visit.
@@ -209,7 +209,7 @@ export default function pathVisitorPlugin(fork: Fork) {
     return root;
   };
 
-  PVp.AbortRequest = function AbortRequest() {};
+  PVp.AbortRequest = function AbortRequest() { };
   PVp.abort = function () {
     var visitor = this;
     visitor._abortRequested = true;
@@ -421,7 +421,7 @@ export default function pathVisitorPlugin(fork: Fork) {
 
       if (this.needToCallTraverse !== false) {
         throw new Error(
-        "Must either call this.traverse or return false in " + methodName
+          "Must either call this.traverse or return false in " + methodName
         );
       }
 
@@ -463,7 +463,7 @@ export default function pathVisitorPlugin(fork: Fork) {
       this.needToCallTraverse = false;
 
       return PathVisitor.fromMethodsObject(
-      newVisitor || this.visitor
+        newVisitor || this.visitor
       ).visitWithoutReset(path);
     };
 

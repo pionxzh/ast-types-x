@@ -25,16 +25,16 @@ export default function (fork: Fork) {
         "emptyArray": function () { return [] },
         "false": function () { return false },
         "true": function () { return true },
-        "undefined": function () {},
+        "undefined": function () { },
         "use strict": function () { return "use strict"; }
     };
 
     var naiveIsPrimitive = Type.or(
-      builtin.string,
-      builtin.number,
-      builtin.boolean,
-      builtin.null,
-      builtin.undefined
+        builtin.string,
+        builtin.number,
+        builtin.boolean,
+        builtin.null,
+        builtin.undefined
     );
 
     const isPrimitive = Type.from(

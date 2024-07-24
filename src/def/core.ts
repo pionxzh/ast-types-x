@@ -65,8 +65,8 @@ export default function (fork: Fork) {
 
   def("Statement").bases("Node");
 
-// The empty .build() here means that an EmptyStatement can be constructed
-// (i.e. it's not abstract) but that it needs no arguments.
+  // The empty .build() here means that an EmptyStatement can be constructed
+  // (i.e. it's not abstract) but that it needs no arguments.
   def("EmptyStatement").bases("Statement").build();
 
   def("BlockStatement")

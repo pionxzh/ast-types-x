@@ -143,12 +143,12 @@ export default function (fork: Fork) {
     .build("properties", "indexers", "callProperties")
     .field("properties", [
       or(def("ObjectTypeProperty"),
-         def("ObjectTypeSpreadProperty"))
+        def("ObjectTypeSpreadProperty"))
     ])
     .field("indexers", [def("ObjectTypeIndexer")], defaults.emptyArray)
     .field("callProperties",
-           [def("ObjectTypeCallProperty")],
-           defaults.emptyArray)
+      [def("ObjectTypeCallProperty")],
+      defaults.emptyArray)
     .field("inexact", or(Boolean, void 0), defaults["undefined"])
     .field("exact", Boolean, defaults["false"])
     .field("internalSlots", [def("ObjectTypeInternalSlot")], defaults.emptyArray);
@@ -192,8 +192,8 @@ export default function (fork: Fork) {
     .bases("Node")
     .build("qualification", "id")
     .field("qualification",
-           or(def("Identifier"),
-              def("QualifiedTypeIdentifier")))
+      or(def("Identifier"),
+        def("QualifiedTypeIdentifier")))
     .field("id", def("Identifier"));
 
   def("GenericTypeAnnotation")
@@ -207,8 +207,8 @@ export default function (fork: Fork) {
     .build("object", "property")
     .field("object", def("Identifier"))
     .field("property",
-           or(def("MemberTypeAnnotation"),
-              def("GenericTypeAnnotation")));
+      or(def("MemberTypeAnnotation"),
+        def("GenericTypeAnnotation")));
 
   def("IndexedAccessType")
     .bases("FlowType")
@@ -283,8 +283,8 @@ export default function (fork: Fork) {
     .field("id", def("Identifier"))
     .field("superClass", or(def("Expression"), null), defaults["null"])
     .field("typeParameters",
-           or(def("TypeParameterInstantiation"), null),
-           defaults["null"]);
+      or(def("TypeParameterInstantiation"), null),
+      defaults["null"]);
 
   def("InterfaceTypeAnnotation")
     .bases("FlowType")
@@ -297,8 +297,8 @@ export default function (fork: Fork) {
     .build("id", "body", "extends")
     .field("id", def("Identifier"))
     .field("typeParameters",
-           or(def("TypeParameterDeclaration"), null),
-           defaults["null"])
+      or(def("TypeParameterDeclaration"), null),
+      defaults["null"])
     .field("body", def("ObjectTypeAnnotation"))
     .field("extends", [def("InterfaceExtends")]);
 
@@ -311,8 +311,8 @@ export default function (fork: Fork) {
     .build("id")
     .field("id", def("Identifier"))
     .field("typeParameters",
-           or(def("TypeParameterInstantiation"), null),
-           defaults["null"]);
+      or(def("TypeParameterInstantiation"), null),
+      defaults["null"]);
 
   def("TypeAlias")
     .bases("Declaration")

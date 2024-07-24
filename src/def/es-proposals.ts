@@ -27,13 +27,13 @@ export default function (fork: Fork) {
 
   def("Property")
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   def("MethodDefinition")
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   // Private names
   def("PrivateName")
@@ -54,7 +54,8 @@ export default function (fork: Fork) {
     .field("key", or(def("Identifier"), def("Literal")))
     .field("value", def("Expression"));
 
-  [ "ImportDeclaration",
+  [
+    "ImportDeclaration",
     "ExportAllDeclaration",
     "ExportNamedDeclaration",
   ].forEach(decl => {

@@ -28,7 +28,7 @@ export default function (fork: Fork) {
     )]);
 
   def("TemplateElement")
-    .field("value", {"cooked": or(String, null), "raw": String});
+    .field("value", { "cooked": or(String, null), "raw": String });
 
   // Legacy
   def("SpreadPropertyPattern")

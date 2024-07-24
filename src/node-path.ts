@@ -20,7 +20,7 @@ export interface NodePath<N = any, V = any> extends Path<V> {
 }
 
 export interface NodePathConstructor {
-  new<N extends ASTNode = any, V = any>(value: any, parentPath?: any, name?: any): NodePath<N, V>;
+  new <N extends ASTNode = any, V = any>(value: any, parentPath?: any, name?: any): NodePath<N, V>;
 }
 
 export default function nodePathPlugin(fork: Fork): NodePathConstructor {
@@ -337,7 +337,8 @@ export default function nodePathPlugin(fork: Fork): NodePathConstructor {
   }
 
   var PRECEDENCE: any = {};
-  [["||"],
+  [
+    ["||"],
     ["&&"],
     ["|"],
     ["^"],

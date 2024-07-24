@@ -25,7 +25,7 @@ export interface Path<V = any> {
 }
 
 export interface PathConstructor {
-  new<V = any>(value: any, parentPath?: any, name?: any): Path<V>;
+  new <V = any>(value: any, parentPath?: any, name?: any): Path<V>;
 }
 
 export default function pathPlugin(fork: Fork): PathConstructor {
@@ -85,8 +85,8 @@ export default function pathPlugin(fork: Fork): PathConstructor {
     return childPath;
   }
 
-// This method is designed to be overridden by subclasses that need to
-// handle missing properties, etc.
+  // This method is designed to be overridden by subclasses that need to
+  // handle missing properties, etc.
   Pp.getValueProperty = function getValueProperty(name) {
     return this.value[name];
   };
@@ -148,7 +148,7 @@ export default function pathPlugin(fork: Fork): PathConstructor {
     return result;
   };
 
-  function emptyMoves() {}
+  function emptyMoves() { }
   function getMoves(path: any, offset: number, start?: any, end?: any) {
     isArray.assert(path.value);
 

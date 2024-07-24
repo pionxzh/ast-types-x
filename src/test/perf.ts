@@ -15,7 +15,7 @@ var names: any[] = [];
 var start = +new Date;
 
 visit(ast, {
-  visitNode: function(path: any) {
+  visitNode: function (path: any) {
     names.push(path.name);
     this.traverse(path);
   }

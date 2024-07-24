@@ -245,7 +245,7 @@ export default function (fork: Fork) {
     .field("importKind", or(
       "value",
       "type"
-    ), function() {
+    ), function () {
       return "value";
     });
 
@@ -286,7 +286,7 @@ export default function (fork: Fork) {
   def("TemplateElement")
     .bases("Node")
     .build("value", "tail")
-    .field("value", {"cooked": String, "raw": String})
+    .field("value", { "cooked": String, "raw": String })
     .field("tail", Boolean);
 
   def("MetaProperty")

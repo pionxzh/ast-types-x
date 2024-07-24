@@ -8,7 +8,7 @@ export function validateECMAScript(file: any) {
   var fullPath = path.join(__dirname, "..", "..", "src", file);
 
   it("should validate " + file + " with Esprima", function (done) {
-    fs.readFile(fullPath, "utf8", function(err, code) {
+    fs.readFile(fullPath, "utf8", function (err, code) {
       if (err) {
         throw err;
       }

@@ -42,20 +42,21 @@ export default function (fork: Fork) {
     .field("static", Boolean, defaults["false"])
     .field("typeAnnotation", TypeAnnotation, defaults["null"]);
 
-  ["ClassDeclaration",
-   "ClassExpression",
+  [
+    "ClassDeclaration",
+    "ClassExpression",
   ].forEach(typeName => {
     def(typeName)
       .field("typeParameters", TypeParamDecl, defaults["null"])
       .field("superTypeParameters",
-             or(def("TypeParameterInstantiation"),
-                def("TSTypeParameterInstantiation"),
-                null),
-             defaults["null"])
+        or(def("TypeParameterInstantiation"),
+          def("TSTypeParameterInstantiation"),
+          null),
+        defaults["null"])
       .field("implements",
-             or([def("ClassImplements")],
-                [def("TSExpressionWithTypeArguments")]),
-             defaults.emptyArray);
+        or([def("ClassImplements")],
+          [def("TSExpressionWithTypeArguments")]),
+        defaults.emptyArray);
   });
 };
 

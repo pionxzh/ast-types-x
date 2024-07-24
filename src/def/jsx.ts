@@ -125,8 +125,8 @@ export default function (fork: Fork) {
     .build("value", "raw")
     .field("value", String)
     .field("raw", String, function (this: N.JSXText) {
-       return this.value;
-     });
+      return this.value;
+    });
 
   def("JSXEmptyExpression")
     .bases("Node")

@@ -186,7 +186,7 @@ export abstract class Def<T = any> {
   constructor(
     public readonly type: Type<T>,
     public readonly typeName: string,
-  ) {}
+  ) { }
 
   isSupertypeOf(that: Def<any>): boolean {
     if (that instanceof Def) {
@@ -438,7 +438,7 @@ export default function typesPlugin(_fork: Fork) {
   // that no subtyping is considered; so, for instance, isObject.check
   // returns false for [], /./, new Date, and null.
   const isString = defBuiltInType("string", "truthy");
-  const isFunction = defBuiltInType("function", function () {});
+  const isFunction = defBuiltInType("function", function () { });
   const isArray = defBuiltInType("array", []);
   const isObject = defBuiltInType("object", {});
   const isRegExp = defBuiltInType("RegExp", /./);
@@ -473,7 +473,7 @@ export default function typesPlugin(_fork: Fork) {
     if (value && typeof value === "object") {
       var type = value.type;
       if (typeof type === "string" &&
-          hasOwn.call(defCache, type)) {
+        hasOwn.call(defCache, type)) {
         var d = defCache[type];
         if (d.finalized) {
           return d;
@@ -512,7 +512,7 @@ export default function typesPlugin(_fork: Fork) {
         // assign a type property to such nodes). Be optimistic and let
         // this.checkAllFields make the final decision.
         if (this.typeName === "SourceLocation" ||
-            this.typeName === "Position") {
+          this.typeName === "Position") {
           return this.checkAllFields(value, deep);
         }
 
@@ -730,7 +730,7 @@ export default function typesPlugin(_fork: Fork) {
         for (var fieldName in allFields) {
           if (hasOwn.call(allFields, fieldName) &&
             !allFields[fieldName].hidden) {
-              this.fieldNames.push(fieldName);
+            this.fieldNames.push(fieldName);
           }
         }
 
@@ -746,7 +746,7 @@ export default function typesPlugin(_fork: Fork) {
         populateSupertypeList(this.typeName, this.supertypeList);
 
         if (this.buildable &&
-            this.supertypeList.lastIndexOf("Expression") >= 0) {
+          this.supertypeList.lastIndexOf("Expression") >= 0) {
           wrapExpressionBuilderWithStatement(this.typeName);
         }
       }
@@ -770,7 +770,7 @@ export default function typesPlugin(_fork: Fork) {
   // most specific supertype whose name is an own property of the candidates
   // object.
   function computeSupertypeLookupTable(candidates: any) {
-    var table: { [typeName: string ]: any } = {};
+    var table: { [typeName: string]: any } = {};
     var typeNames = Object.keys(defCache);
     var typeNameCount = typeNames.length;
 
@@ -798,7 +798,7 @@ export default function typesPlugin(_fork: Fork) {
   var nodePrototype: { [definedMethod: string]: Function } = {};
 
   // Call this function to define a new method to be shared by all AST
-   // nodes. The replaced method (if any) is returned for easy wrapping.
+  // nodes. The replaced method (if any) is returned for easy wrapping.
   function defineMethod(name: any, func?: Function) {
     var old = nodePrototype[name];
 

@@ -30,8 +30,8 @@ export default function (fork: Fork) {
                 }
             } else {
                 throw new Error(
-                  "Nodes differ in the following path: " +
-                  problemPath.map(subscriptForProperty).join("")
+                    "Nodes differ in the following path: " +
+                    problemPath.map(subscriptForProperty).join("")
                 );
             }
         }
@@ -67,7 +67,7 @@ export default function (fork: Fork) {
                 a.global === b.global &&
                 a.multiline === b.multiline &&
                 a.ignoreCase === b.ignoreCase
-              );
+            );
         }
 
         return a == b;
@@ -184,7 +184,7 @@ export default function (fork: Fork) {
 
         return false;
     }
-    
+
     return astNodesAreEquivalent;
 };
 
