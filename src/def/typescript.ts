@@ -522,6 +522,9 @@ export default function (fork: Fork) {
       def("TSDeclareMethod"),
       TSTypeMember
     )]);
+
+  def("CallExpression")
+    .bases("TSHasOptionalTypeParameterInstantiation");
 };
 
 maybeSetModuleExports(() => module);
