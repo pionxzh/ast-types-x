@@ -507,7 +507,7 @@ describe("types.visit", function() {
       }
     });
 
-    // Make sure all identifers beneath member expressions were skipped.
+    // Make sure all identifiers beneath member expressions were skipped.
     assert.deepEqual(ids, { err: true });
 
     ids = {};
@@ -1567,7 +1567,7 @@ var {
   });
 
   // ObjectPattern with PropertyPattern and SpreadPropertyPattern
-  // ArrayPatterhn with SpreadElementPattern
+  // ArrayPattern with SpreadElementPattern
   describe("Mozilla Parser API", function() {
     var types = fork([
       coreDef,
@@ -2027,7 +2027,7 @@ describe("path.shift", function() {
 describe("path.unshift", function() {
   it("should work like Array.prototype.unshift", function() {
     var path = new NodePath(b.sequenceExpression([]));
-    var elems = path.get("expressions");
+    var expressions = path.get("expressions");
 
     var one = b.literal(1);
     var two = b.literal(2);
@@ -2035,25 +2035,25 @@ describe("path.unshift", function() {
     var four = b.literal(4);
     var five = b.literal(5);
 
-    assert.strictEqual(elems.get(1).parentPath, elems);
-    assert.strictEqual(elems.get(1).node, path.value);
-    assert.strictEqual(elems.get(1).parent, null);
+    assert.strictEqual(expressions.get(1).parentPath, expressions);
+    assert.strictEqual(expressions.get(1).node, path.value);
+    assert.strictEqual(expressions.get(1).parent, null);
 
-    assert.strictEqual(elems.get("length").value, 0);
-    elems.unshift(three, four, five);
+    assert.strictEqual(expressions.get("length").value, 0);
+    expressions.unshift(three, four, five);
     assert.deepEqual(path.value.expressions, [three, four, five]);
-    var fourPath = elems.get(1);
+    var fourPath = expressions.get(1);
     assert.strictEqual(fourPath.value.value, 4);
-    elems.unshift(one, two);
-    assert.deepEqual(elems.value, [one, two, three, four, five]);
-    elems.unshift();
-    assert.deepEqual(elems.value, [one, two, three, four, five]);
+    expressions.unshift(one, two);
+    assert.deepEqual(expressions.value, [one, two, three, four, five]);
+    expressions.unshift();
+    assert.deepEqual(expressions.value, [one, two, three, four, five]);
     assert.strictEqual(fourPath.name, 3);
-    assert.strictEqual(elems.get("length").value, 5);
+    assert.strictEqual(expressions.get("length").value, 5);
 
-    assert.strictEqual(elems.get(1).parentPath, elems);
-    assert.strictEqual(elems.get(1).node, two);
-    assert.strictEqual(elems.get(1).parent, path);
+    assert.strictEqual(expressions.get(1).parentPath, expressions);
+    assert.strictEqual(expressions.get(1).node, two);
+    assert.strictEqual(expressions.get(1).parent, path);
   });
 
   it("should throw when path.value not an array", function() {
@@ -2066,18 +2066,18 @@ describe("path.unshift", function() {
 describe("path.push", function() {
   it("should work like Array.prototype.push", function() {
     var path = new NodePath({ elements: [0] });
-    var elems = path.get("elements");
-    assert.strictEqual(elems.get("length").value, 1);
-    elems.push(1, 2, 3);
+    var elements = path.get("elements");
+    assert.strictEqual(elements.get("length").value, 1);
+    elements.push(1, 2, 3);
     assert.deepEqual(path.value.elements, [0, 1, 2, 3]);
-    var two = elems.get(2);
+    var two = elements.get(2);
     assert.strictEqual(two.value, 2);
-    elems.push(4, 5);
-    assert.deepEqual(elems.value, [0, 1, 2, 3, 4, 5]);
-    elems.push();
-    assert.deepEqual(elems.value, [0, 1, 2, 3, 4, 5]);
+    elements.push(4, 5);
+    assert.deepEqual(elements.value, [0, 1, 2, 3, 4, 5]);
+    elements.push();
+    assert.deepEqual(elements.value, [0, 1, 2, 3, 4, 5]);
     assert.strictEqual(two.name, 2);
-    assert.strictEqual(elems.get("length").value, 6);
+    assert.strictEqual(elements.get("length").value, 6);
   });
 
   it("should throw when path.value not an array", function() {
@@ -2134,21 +2134,21 @@ describe("path.insertAt", function() {
       elements: [0, "foo", true]
     });
 
-    var elems = path.get("elements");
-    elems.insertAt(1, "a", "b");
-    assert.deepEqual(elems.value, [0, "a", "b", "foo", true]);
+    var elements = path.get("elements");
+    elements.insertAt(1, "a", "b");
+    assert.deepEqual(elements.value, [0, "a", "b", "foo", true]);
 
-    elems.insertAt(elems.get("length").value + 1, []);
-    assert.deepEqual(elems.value, [0, "a", "b", "foo", true,, []]);
-    assert.strictEqual(elems.get("length").value, 7);
+    elements.insertAt(elements.get("length").value + 1, []);
+    assert.deepEqual(elements.value, [0, "a", "b", "foo", true,, []]);
+    assert.strictEqual(elements.get("length").value, 7);
 
-    elems.insertAt(elems.get("length").value + 12345);
-    assert.deepEqual(elems.value, [0, "a", "b", "foo", true,, []]);
-    assert.strictEqual(elems.get("length").value, 7);
+    elements.insertAt(elements.get("length").value + 12345);
+    assert.deepEqual(elements.value, [0, "a", "b", "foo", true,, []]);
+    assert.strictEqual(elements.get("length").value, 7);
 
-    elems.insertAt(-2, -2, -1);
-    assert.deepEqual(elems.value, [-2, -1, 0, "a", "b", "foo", true,, []]);
-    assert.strictEqual(elems.get("length").value, 9);
+    elements.insertAt(-2, -2, -1);
+    assert.deepEqual(elements.value, [-2, -1, 0, "a", "b", "foo", true,, []]);
+    assert.strictEqual(elements.get("length").value, 9);
   });
 
   it("should insert nodes even when path.value is empty", function() {
@@ -2156,13 +2156,13 @@ describe("path.insertAt", function() {
       elements: []
     });
 
-    var elems = path.get("elements");
-    elems.insertAt(0, 0, "foo", true);
-    assert.deepEqual(elems.value, [0, "foo", true]);
+    var elements = path.get("elements");
+    elements.insertAt(0, 0, "foo", true);
+    assert.deepEqual(elements.value, [0, "foo", true]);
 
-    elems.replace([]);
-    elems.insertAt(1, 0, "foo", true);
-    assert.deepEqual(elems.value, [, 0, "foo", true]);
+    elements.replace([]);
+    elements.insertAt(1, 0, "foo", true);
+    assert.deepEqual(elements.value, [, 0, "foo", true]);
   });
 
   it("should throw when path.value not an array", function() {
