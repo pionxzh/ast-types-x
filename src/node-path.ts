@@ -1,7 +1,10 @@
-import typesPlugin, { ASTNode, Fork } from "./types";
-import pathPlugin, { Path } from "./path";
-import scopePlugin, { Scope } from "./scope";
-import { namedTypes } from "./gen/namedTypes";
+import type { ASTNode, Fork } from "./types";
+import typesPlugin from "./types";
+import type { Path } from "./path";
+import pathPlugin from "./path";
+import type { Scope } from "./scope";
+import scopePlugin from "./scope";
+import type { namedTypes } from "./gen/namedTypes";
 import { maybeSetModuleExports } from "./shared";
 
 export interface NodePath<N = any, V = any> extends Path<V> {

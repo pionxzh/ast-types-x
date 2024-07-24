@@ -118,7 +118,7 @@ export default function (fork: Fork) {
   def("TSArrayType")
     .bases("TSType")
     .build("elementType")
-    .field("elementType", def("TSType"))
+    .field("elementType", def("TSType"));
 
   def("TSLiteralType")
     .bases("TSType")
@@ -281,7 +281,7 @@ export default function (fork: Fork) {
     .bases("TSType")
     .build("objectType", "indexType")
     .field("objectType", def("TSType"))
-    .field("indexType", def("TSType"))
+    .field("indexType", def("TSType"));
 
   def("TSTypeOperator")
     .bases("TSType")

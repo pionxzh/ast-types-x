@@ -1,5 +1,6 @@
 import { maybeSetModuleExports } from "./shared";
-import typesPlugin, { Fork } from "./types";
+import type { Fork } from "./types";
+import typesPlugin from "./types";
 
 export default function (fork: Fork) {
     var types = fork.use(typesPlugin);

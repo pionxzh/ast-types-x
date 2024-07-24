@@ -1,9 +1,9 @@
+import type { Fork, Plugin } from "./types";
 import typesPlugin from "./types";
 import pathVisitorPlugin from "./path-visitor";
 import equivPlugin from "./equiv";
 import pathPlugin from "./path";
 import nodePathPlugin from "./node-path";
-import { Fork, Plugin } from "./types";
 import { maybeSetModuleExports } from "./shared";
 
 export default function (plugins: Plugin<any>[]) {

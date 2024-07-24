@@ -1,7 +1,7 @@
-import { Fork } from "../types";
-import es2017Def from "./es2017";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
+import es2017Def from "./es2017";
 
 export default function (fork: Fork) {
   fork.use(es2017Def);
@@ -28,7 +28,7 @@ export default function (fork: Fork) {
     )]);
 
   def("TemplateElement")
-    .field("value", { "cooked": or(String, null), "raw": String });
+    .field("value", { cooked: or(String, null), raw: String });
 
   // Legacy
   def("SpreadPropertyPattern")

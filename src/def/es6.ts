@@ -1,7 +1,7 @@
-import { Fork } from "../types";
-import coreDef from "./core";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
+import coreDef from "./core";
 
 export default function (fork: Fork) {
   fork.use(coreDef);
@@ -286,7 +286,7 @@ export default function (fork: Fork) {
   def("TemplateElement")
     .bases("Node")
     .build("value", "tail")
-    .field("value", { "cooked": String, "raw": String })
+    .field("value", { cooked: String, raw: String })
     .field("tail", Boolean);
 
   def("MetaProperty")

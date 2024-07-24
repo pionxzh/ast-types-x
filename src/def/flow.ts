@@ -1,8 +1,8 @@
-import { Fork } from "../types";
-import esProposalsDef from "./es-proposals";
-import typeAnnotationsDef from "./type-annotations";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
+import esProposalsDef from "./es-proposals";
+import typeAnnotationsDef from "./type-annotations";
 
 export default function (fork: Fork) {
   fork.use(esProposalsDef);
@@ -221,7 +221,7 @@ export default function (fork: Fork) {
     .build("objectType", "indexType", "optional")
     .field("objectType", def("FlowType"))
     .field("indexType", def("FlowType"))
-    .field('optional', Boolean);
+    .field("optional", Boolean);
 
   def("UnionTypeAnnotation")
     .bases("FlowType")
@@ -273,8 +273,8 @@ export default function (fork: Fork) {
   def("ClassProperty")
     .field("variance", LegacyVariance, defaults["null"]);
 
-  def('PropertyDefinition')
-    .bases('ClassProperty')
+  def("PropertyDefinition")
+    .bases("ClassProperty")
     .build();
 
   def("ClassImplements")
