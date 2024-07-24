@@ -1,4 +1,4 @@
-import { Fork } from "../types";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
 import es2022Def from "./es2022";

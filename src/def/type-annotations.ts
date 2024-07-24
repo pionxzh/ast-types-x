@@ -4,7 +4,7 @@
  * because they use the same name.
  */
 
-import { Fork } from "../types";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
 

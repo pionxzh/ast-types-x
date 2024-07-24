@@ -7,10 +7,10 @@ export default function (fork: import("../../types").Fork) {
   // Exponentiation operators. Must run before BinaryOperators or
   // AssignmentOperators are used (hence before fork.use(es6Def)).
   // https://github.com/tc39/proposal-exponentiation-operator
-  if (result.BinaryOperators.indexOf("**") < 0) {
+  if (!result.BinaryOperators.includes("**")) {
     result.BinaryOperators.push("**");
   }
-  if (result.AssignmentOperators.indexOf("**=") < 0) {
+  if (!result.AssignmentOperators.includes("**=")) {
     result.AssignmentOperators.push("**=");
   }
 

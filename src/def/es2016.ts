@@ -1,7 +1,7 @@
-import { Fork } from "../types";
+import type { Fork } from "../types";
+import { maybeSetModuleExports } from "../shared";
 import es2016OpsDef from "./operators/es2016";
 import es6Def from "./es6";
-import { maybeSetModuleExports } from "../shared";
 
 export default function (fork: Fork) {
   // The es2016OpsDef plugin comes before es6Def so BinaryOperators and

@@ -6,9 +6,9 @@ export default function (fork: import("../../types").Fork) {
 
   // Logical assignment operators. Must run before AssignmentOperators is used.
   // https://github.com/tc39/proposal-logical-assignment
-  result.LogicalOperators.forEach(op => {
-    const assignOp = op + "=";
-    if (result.AssignmentOperators.indexOf(assignOp) < 0) {
+  result.LogicalOperators.forEach((op) => {
+    const assignOp = `${op}=`;
+    if (!result.AssignmentOperators.includes(assignOp)) {
       result.AssignmentOperators.push(assignOp);
     }
   });

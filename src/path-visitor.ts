@@ -1,5 +1,7 @@
-import typesPlugin, { ASTNode, Fork, Omit } from "./types";
-import nodePathPlugin, { NodePath } from "./node-path";
+import type { ASTNode, Fork, Omit } from "./types";
+import typesPlugin from "./types";
+import type { NodePath } from "./node-path";
+import nodePathPlugin from "./node-path";
 import { maybeSetModuleExports } from "./shared";
 
 var hasOwn = Object.prototype.hasOwnProperty;

@@ -1,8 +1,8 @@
-import { Fork } from "../types";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
+import { maybeSetModuleExports } from "../shared";
 import babelCoreDef from "./babel-core";
 import flowDef from "./flow";
-import { maybeSetModuleExports } from "../shared";
 
 export default function (fork: Fork) {
   const types = fork.use(typesPlugin);

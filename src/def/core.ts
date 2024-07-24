@@ -1,8 +1,8 @@
-import { Fork } from "../types";
-import coreOpsDef from "./operators/core";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
-import { namedTypes as N } from "../gen/namedTypes";
+import type { namedTypes as N } from "../gen/namedTypes";
+import coreOpsDef from "./operators/core";
 
 export default function (fork: Fork) {
   var types = fork.use(typesPlugin);

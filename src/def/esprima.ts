@@ -1,7 +1,7 @@
-import { Fork } from "../types";
-import esProposalsDef from "./es-proposals";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
+import esProposalsDef from "./es-proposals";
 
 export default function (fork: Fork) {
   fork.use(esProposalsDef);

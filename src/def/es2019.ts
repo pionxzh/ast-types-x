@@ -1,7 +1,7 @@
-import { Fork } from "../types";
-import es2018Def from "./es2018";
+import type { Fork } from "../types";
 import typesPlugin from "../types";
 import sharedPlugin, { maybeSetModuleExports } from "../shared";
+import es2018Def from "./es2018";
 
 export default function (fork: Fork) {
   fork.use(es2018Def);

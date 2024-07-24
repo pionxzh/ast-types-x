@@ -1,5 +1,6 @@
 import { maybeSetModuleExports } from "./shared";
-import typesPlugin, { ASTNode, Fork } from "./types";
+import type { ASTNode, Fork } from "./types";
+import typesPlugin from "./types";
 
 var Op = Object.prototype;
 var hasOwn = Op.hasOwnProperty;

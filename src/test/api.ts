@@ -1,5 +1,5 @@
-import assert from "assert";
-import { namedTypes, builders } from "../main";
+import assert from "node:assert";
+import { builders, namedTypes } from "../main";
 import * as types from "../main";
 
 describe("namedTypes", function () {
