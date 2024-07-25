@@ -1,4 +1,3 @@
-import type { ExpressionKind } from "./gen/kinds";
 import type { namedTypes } from "./main";
 import type { NodePath } from "./node-path";
 import { maybeSetModuleExports } from "./shared";
@@ -9,7 +8,7 @@ var hasOwn = Object.prototype.hasOwnProperty;
 
 export type ScopeType = "global" | "function" | "block" | "switch" | "catch" | "with" | "for" | "class" | "type";
 
-export type ScopeBinding = Record<string, (NodePath | namedTypes.Identifier)[]>;
+export type ScopeBinding = Record<string, NodePath<namedTypes.Identifier>[]>;
 
 export type ScopeTypes = Record<string, NodePath[]>;
 
@@ -25,8 +24,6 @@ export interface Scope {
   didScan: boolean;
   declares(name: string): boolean
   declaresType(name: string): boolean
-  declareTemporary(prefix?: string): namedTypes.Identifier;
-  injectTemporary(identifier?: namedTypes.Identifier, init?: ExpressionKind | null): namedTypes.Identifier;
   markAsStale(): void;
   scan(force?: boolean): void;
   getBindings(): ScopeBinding;
@@ -53,7 +50,6 @@ export default function scopePlugin(fork: Fork) {
   var Node = namedTypes.Node;
   var Expression = namedTypes.Expression;
   var isArray = types.builtInTypes.array;
-  var b = types.builders;
 
   const Scope = function Scope(this: Scope, path: NodePath, parentScope?: Scope | null) {
     if (!(this instanceof Scope)) {
@@ -160,50 +156,6 @@ export default function scopePlugin(fork: Fork) {
   Sp.declaresType = function (name) {
     this.scan();
     return hasOwn.call(this.types, name);
-  };
-
-  Sp.declareTemporary = function (prefix) {
-    if (prefix) {
-      if (!/^[a-z$_]/i.test(prefix)) {
-        throw new Error("");
-      }
-    } else {
-      prefix = "t$";
-    }
-
-    // Include this.depth in the name to make sure the name does not
-    // collide with any variables in nested/enclosing scopes.
-    prefix += this.depth.toString(36) + "$";
-
-    this.scan();
-
-    var index = 0;
-    while (this.declares(prefix + index)) {
-      ++index;
-    }
-
-    var name = prefix + index;
-    var identifier = types.builders.identifier(name);
-    this.bindings[name] = [identifier];
-    return identifier;
-  };
-
-  Sp.injectTemporary = function (identifier?: namedTypes.Identifier, init?: ExpressionKind | null) {
-    identifier || (identifier = this.declareTemporary());
-
-    var bodyPath = this.path.get("body");
-    if (namedTypes.BlockStatement.check(bodyPath.value)) {
-      bodyPath = bodyPath.get("body");
-    }
-
-    bodyPath.unshift(
-      b.variableDeclaration(
-        "var",
-        [b.variableDeclarator(identifier, init || null)]
-      )
-    );
-
-    return identifier;
   };
 
   Sp.markAsStale = function () {
