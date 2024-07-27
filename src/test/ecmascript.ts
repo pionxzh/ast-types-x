@@ -41,7 +41,6 @@ const {
 var rawTypes = use(typesPlugin);
 
 var hasOwn = Object.prototype.hasOwnProperty;
-var nodeMajorVersion = parseInt(process.versions.node, 10);
 
 // Type alias to indicate when we're intentionally passing invalid types.
 type $InvalidType = any;
@@ -1233,8 +1232,7 @@ function aFunction(arg1, { arg2 }) {
     }
   });
 
-  (nodeMajorVersion >= 6 ? it : xit)
-    ("should work for ES6 syntax (espree)", function () {
+  it("should work for ES6 syntax (espree)", function () {
       var names;
 
       var ast = espree.parse([
@@ -1257,8 +1255,7 @@ function aFunction(arg1, { arg2 }) {
       });
     });
 
-  (nodeMajorVersion >= 6 ? it : xit)
-    ("should work with classes for ES6 syntax (espree)", function () {
+  it("should work with classes for ES6 syntax (espree)", function () {
       var names;
 
       var ast = espree.parse([
