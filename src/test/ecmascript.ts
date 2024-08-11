@@ -1207,6 +1207,27 @@ describe("scope methods", function () {
     assert.deepEqual(names, ["x", "xyDefault", "xyNamespace", "z"]);
   });
 
+  it("getBindings should work for function declarations", function () {
+    const code = `
+    function J(U) {
+      var B = U.children;
+      var J = U.id;
+    }`
+
+    const ast = parse(code);
+    const program = new NodePath(ast);
+    const programScope = program.scope!;
+    const funcDecl = program.get("body", 0);
+    const funcScope = funcDecl.scope;
+    const funcId = funcDecl.get("id");
+    const funcIdScope = funcId.scope;
+    assert.deepEqual(["B", "J", "U"], Object.keys(funcScope.getBindings()).sort());
+    assert.deepEqual(["J"], Object.keys(programScope.getBindings()).sort());
+    assert.deepEqual(1, programScope.getBindings()["J"].length);
+    assert.deepEqual(1, funcScope.getBindings()["J"].length);
+    assert.strictEqual(funcIdScope, programScope);
+  });
+
   describe("getBindings should work with destructuring operations", function () {
     const code = `
 function aFunction(arg1, { arg2 }) {

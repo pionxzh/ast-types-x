@@ -141,9 +141,14 @@ export default function nodePathPlugin(fork: Fork): NodePathConstructor {
     var pp = this.parentPath;
     var scope = pp && pp.scope;
 
-    if (n.Node.check(value) &&
-      Scope.isEstablishedBy(this)) {
-      scope = new Scope(this, scope);
+    if (n.Node.check(value)) {
+      // function id belongs to the global or the upper scope
+      if (pp && pp.parentPath && n.Identifier.check(value) && n.FunctionDeclaration.check(pp.value) && pp.value.id === value) {
+        scope = pp.parentPath.scope;
+      }
+      else if (Scope.isEstablishedBy(this)) {
+        scope = new Scope(this, scope);
+      }
     }
 
     return scope || null;
