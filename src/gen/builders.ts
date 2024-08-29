@@ -879,6 +879,7 @@ export interface ClassPropertyBuilder {
       access?: "public" | "private" | "protected" | undefined;
       comments?: K.CommentKind[] | null;
       computed?: boolean;
+      decorators?: K.DecoratorKind[] | null;
       key: K.LiteralKind | K.IdentifierKind | K.ExpressionKind;
       loc?: K.SourceLocationKind | null;
       static?: boolean;
@@ -923,6 +924,7 @@ export interface ClassDeclarationBuilder {
     params: {
       body: K.ClassBodyKind;
       comments?: K.CommentKind[] | null;
+      decorators?: K.DecoratorKind[] | null;
       id: K.IdentifierKind | null;
       implements?: K.ClassImplementsKind[] | K.TSExpressionWithTypeArgumentsKind[];
       loc?: K.SourceLocationKind | null;
@@ -1271,6 +1273,7 @@ export interface ClassPrivatePropertyBuilder {
       access?: "public" | "private" | "protected" | undefined;
       comments?: K.CommentKind[] | null;
       computed?: boolean;
+      decorators?: K.DecoratorKind[] | null;
       key: K.PrivateNameKind;
       loc?: K.SourceLocationKind | null;
       static?: boolean;
@@ -2126,6 +2129,7 @@ export interface PropertyDefinitionBuilder {
       access?: "public" | "private" | "protected" | undefined;
       comments?: K.CommentKind[] | null;
       computed?: boolean;
+      decorators?: K.DecoratorKind[] | null;
       key: K.LiteralKind | K.IdentifierKind | K.ExpressionKind;
       loc?: K.SourceLocationKind | null;
       static?: boolean;

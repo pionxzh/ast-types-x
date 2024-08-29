@@ -432,6 +432,7 @@ export namespace namedTypes {
     type: "ClassProperty";
     key: K.LiteralKind | K.IdentifierKind | K.ExpressionKind;
     computed?: boolean;
+    decorators?: K.DecoratorKind[] | null;
     value: K.ExpressionKind | null;
     static?: boolean;
     typeAnnotation?: K.TypeAnnotationKind | K.TSTypeAnnotationKind | null;
@@ -454,6 +455,7 @@ export namespace namedTypes {
     id: K.IdentifierKind | null;
     body: K.ClassBodyKind;
     superClass?: K.ExpressionKind | null;
+    decorators?: K.DecoratorKind[] | null;
     typeParameters?: K.TypeParameterDeclarationKind | K.TSTypeParameterDeclarationKind | null;
     superTypeParameters?: K.TypeParameterInstantiationKind | K.TSTypeParameterInstantiationKind | null;
     implements?: K.ClassImplementsKind[] | K.TSExpressionWithTypeArgumentsKind[];
