@@ -20,20 +20,23 @@ export default function (fork: Fork) {
     .field("all", Boolean, defaults["false"]);
 
   // Decorators
+  // https://github.com/tc39/proposal-decorators
   def("Decorator")
     .bases("Node")
     .build("expression")
     .field("expression", def("Expression"));
 
-  def("Property")
-    .field("decorators",
-      or([def("Decorator")], null),
-      defaults["null"]);
-
-  def("MethodDefinition")
-    .field("decorators",
-      or([def("Decorator")], null),
-      defaults["null"]);
+  [
+    "ClassDeclaration",
+    "Property",
+    "ClassProperty",
+    "MethodDefinition"
+  ].forEach(decl => {
+    def(decl)
+      .field("decorators",
+        or([def("Decorator")], null),
+        defaults["null"]);
+  });
 
   // Private names
   def("PrivateName")
