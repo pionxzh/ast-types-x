@@ -514,9 +514,9 @@ export default function (fork: Fork) {
       def("ClassPropertyDefinition"),
       def("ClassProperty"),
       def("ClassPrivateProperty"),
-      def("ClassAccessorProperty"),
       def("ClassMethod"),
       def("ClassPrivateMethod"),
+      def("ClassAccessorProperty"),
       def("StaticBlock"),
       // Just need to add these types:
       def("TSDeclareMethod"),

@@ -9,6 +9,11 @@ export default function (fork: Fork) {
   const types = fork.use(typesPlugin);
   const def = types.Type.def;
 
+  def("PrivateIdentifier")
+    .bases("Expression", "Pattern")
+    .build("id")
+    .field("id", def("Identifier"));
+
   def("StaticBlock")
     .bases("Declaration")
     .build("body")

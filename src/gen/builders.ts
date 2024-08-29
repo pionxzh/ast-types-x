@@ -902,11 +902,11 @@ export interface StaticBlockBuilder {
 
 export interface ClassBodyBuilder {
   (
-    body: (K.MethodDefinitionKind | K.VariableDeclaratorKind | K.ClassPropertyDefinitionKind | K.ClassPropertyKind | K.ClassPrivatePropertyKind | K.ClassAccessorPropertyKind | K.ClassMethodKind | K.ClassPrivateMethodKind | K.StaticBlockKind | K.TSDeclareMethodKind | K.TSCallSignatureDeclarationKind | K.TSConstructSignatureDeclarationKind | K.TSIndexSignatureKind | K.TSMethodSignatureKind | K.TSPropertySignatureKind)[]
+    body: (K.MethodDefinitionKind | K.VariableDeclaratorKind | K.ClassPropertyDefinitionKind | K.ClassPropertyKind | K.ClassPrivatePropertyKind | K.ClassMethodKind | K.ClassPrivateMethodKind | K.ClassAccessorPropertyKind | K.StaticBlockKind | K.TSDeclareMethodKind | K.TSCallSignatureDeclarationKind | K.TSConstructSignatureDeclarationKind | K.TSIndexSignatureKind | K.TSMethodSignatureKind | K.TSPropertySignatureKind)[]
   ): namedTypes.ClassBody;
   from(
     params: {
-      body: (K.MethodDefinitionKind | K.VariableDeclaratorKind | K.ClassPropertyDefinitionKind | K.ClassPropertyKind | K.ClassPrivatePropertyKind | K.ClassAccessorPropertyKind | K.ClassMethodKind | K.ClassPrivateMethodKind | K.StaticBlockKind | K.TSDeclareMethodKind | K.TSCallSignatureDeclarationKind | K.TSConstructSignatureDeclarationKind | K.TSIndexSignatureKind | K.TSMethodSignatureKind | K.TSPropertySignatureKind)[];
+      body: (K.MethodDefinitionKind | K.VariableDeclaratorKind | K.ClassPropertyDefinitionKind | K.ClassPropertyKind | K.ClassPrivatePropertyKind | K.ClassMethodKind | K.ClassPrivateMethodKind | K.ClassAccessorPropertyKind | K.StaticBlockKind | K.TSDeclareMethodKind | K.TSCallSignatureDeclarationKind | K.TSConstructSignatureDeclarationKind | K.TSIndexSignatureKind | K.TSMethodSignatureKind | K.TSPropertySignatureKind)[];
       comments?: K.CommentKind[] | null;
       loc?: K.SourceLocationKind | null;
     }
@@ -1229,6 +1229,17 @@ export interface OptionalMemberExpressionBuilder {
       property: K.IdentifierKind | K.ExpressionKind;
     }
   ): namedTypes.OptionalMemberExpression;
+}
+
+export interface PrivateIdentifierBuilder {
+  (id: K.IdentifierKind): namedTypes.PrivateIdentifier;
+  from(
+    params: {
+      comments?: K.CommentKind[] | null;
+      id: K.IdentifierKind;
+      loc?: K.SourceLocationKind | null;
+    }
+  ): namedTypes.PrivateIdentifier;
 }
 
 export interface DecoratorBuilder {
@@ -3848,6 +3859,7 @@ export interface builders {
   chainExpression: ChainExpressionBuilder;
   optionalCallExpression: OptionalCallExpressionBuilder;
   optionalMemberExpression: OptionalMemberExpressionBuilder;
+  privateIdentifier: PrivateIdentifierBuilder;
   decorator: DecoratorBuilder;
   privateName: PrivateNameBuilder;
   classPrivateProperty: ClassPrivatePropertyBuilder;
