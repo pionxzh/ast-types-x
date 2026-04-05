@@ -3,6 +3,7 @@
   "name": "ast-types-x",
   "version": "1.18.0",
   "packageManager": "pnpm@8.15.7",
+  "type": "module",
   "description": "Esprima-compatible implementation of the Mozilla JS Parser API",
   "keywords": [
     "ast",
@@ -26,14 +27,15 @@
     "url": "git://github.com/pionxzh/ast-types-x.git"
   },
   "license": "MIT",
-  "main": "lib/main.js",
-  "types": "lib/main.d.ts",
+  "main": "./lib/main.cjs",
+  "module": "./lib/main.js",
+  "types": "./lib/main.d.ts",
   "exports": {
-    ".": "./lib/main.js",
-    "./lib/*": "./lib/*.js",
-    "./lib/*.js": "./lib/*.js",
-    "./*": "./lib/*.js",
-    "./*.js": "./lib/*.js"
+    ".": {
+      "types": "./lib/main.d.ts",
+      "import": "./lib/main.js",
+      "require": "./lib/main.cjs"
+    }
   },
   "scripts": {
     "gen": "ts-node --transpile-only script/gen-types.ts",
@@ -41,11 +43,8 @@
     "test:watch": "mocha --reporter spec --full-trace src/test/run.ts --watch --watch-files src",
     "run-test": "npm run gen && npm run build && mocha --reporter spec --full-trace lib/test/run.js",
     "clean": "rimraf lib/",
-    "build": "tsc",
+    "build": "tsup",
     "prepare": "npm run clean && npm run build"
-  },
-  "dependencies": {
-    "tslib": "^2.0.1"
   },
   "devDependencies": {
     "@babel/parser": "7.24.8",
@@ -64,6 +63,7 @@
     "reify": "0.20.12",
     "rimraf": "6.0.1",
     "ts-node": "10.9.2",
+    "tsup": "^8.5.0",
     "tsx": "^4.16.2",
     "typescript": "5.5.3"
   },
